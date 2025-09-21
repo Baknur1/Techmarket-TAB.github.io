@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacBook Pro 16" - TechMarket</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h1 class="logo">TechMarket</h1>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="catalog.html" class="nav-link">Catalog</a>
+                    <a href="comparison.html" class="nav-link">Compare</a>
+                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="profile.html" class="nav-link">Profile</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="search-btn">
+                        <div id="search-icon"></div>
+                    </button>
+                    <button class="menu-btn">
+                        <div id="menu-icon"></div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="product-container">
+            <!-- Product Images -->
+            <section class="product-images">
+                <div class="main-image">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop&crop=center" alt="MacBook Pro 16" id="mainImage" onerror="this.src='https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=MacBook+Pro+16'">
+                </div>
+                <div class="image-thumbnails">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100&h=100&fit=crop&crop=center" alt="Front view" class="thumbnail active" onerror="this.src='https://via.placeholder.com/100x100/4F46E5/FFFFFF?text=Front'">
+                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center" alt="Side view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/059669/FFFFFF?text=Side'">
+                    <img src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=100&h=100&fit=crop&crop=center" alt="Back view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/DC2626/FFFFFF?text=Back'">
+                    <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=100&h=100&fit=crop&crop=center" alt="Open view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/7C3AED/FFFFFF?text=Open'">
+                </div>
+            </section>
+
+            <!-- Product Details -->
+            <section class="product-details">
+                <div class="product-header">
+                    <h1 class="product-title">MacBook Pro 16" with M3 Pro chip</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(4.8/5) • 1,234 reviews</span>
+                    </div>
+                </div>
+
+                <div class="product-price-section">
+                    <div class="current-price">$2,499</div>
+                    <div class="original-price">$2,699</div>
+                    <div class="discount">Save $200</div>
+                </div>
+
+                <!-- Key Specifications -->
+                <div class="key-specs">
+                    <h3 class="specs-title">Key Specifications</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <span class="spec-label">Processor</span>
+                            <span class="spec-value">Apple M3 Pro</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Memory</span>
+                            <span class="spec-value">16GB RAM</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Storage</span>
+                            <span class="spec-value">512GB SSD</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Display</span>
+                            <span class="spec-value">16.2" Liquid Retina XDR</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Graphics</span>
+                            <span class="spec-value">19-core GPU</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Battery</span>
+                            <span class="spec-value">Up to 22 hours</span>
+                        </div>
+                    </div>
+                    <button class="btn-outline specs-toggle">View All Specifications</button>
+                </div>
+
+                <!-- All Specifications (Hidden by default) -->
+                <div class="all-specs" id="allSpecs" style="display: none;">
+                    <h4 class="specs-subtitle">Complete Specifications</h4>
+                    <div class="specs-list">
+                        <div class="spec-row">
+                            <span class="spec-name">Chip</span>
+                            <span class="spec-detail">Apple M3 Pro chip with 12-core CPU, 19-core GPU, 16-core Neural Engine</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Memory</span>
+                            <span class="spec-detail">16GB unified memory</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Storage</span>
+                            <span class="spec-detail">512GB SSD</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Display</span>
+                            <span class="spec-detail">16.2-inch Liquid Retina XDR display with ProMotion</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Ports</span>
+                            <span class="spec-detail">3x Thunderbolt 4, HDMI, SDXC card slot, MagSafe 3, 3.5mm headphone jack</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Wireless</span>
+                            <span class="spec-detail">Wi-Fi 6E, Bluetooth 5.3</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Camera</span>
+                            <span class="spec-detail">1080p FaceTime HD camera</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-name">Audio</span>
+                            <span class="spec-detail">Six-speaker sound system with force-cancelling woofers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Comparison -->
+                <div class="price-comparison">
+                    <h3 class="comparison-title">Compare Prices</h3>
+                    <div class="sellers-list">
+                        <div class="seller-item">
+                            <div class="seller-info">
+                                <span class="seller-name">Apple Store</span>
+                                <span class="seller-rating">★★★★★ (4.9)</span>
+                            </div>
+                            <div class="seller-price">$2,499</div>
+                            <button class="btn-primary seller-buy">Buy Now</button>
+                        </div>
+                        <div class="seller-item">
+                            <div class="seller-info">
+                                <span class="seller-name">Best Buy</span>
+                                <span class="seller-rating">★★★★☆ (4.7)</span>
+                            </div>
+                            <div class="seller-price">$2,399</div>
+                            <button class="btn-primary seller-buy">Buy Now</button>
+                        </div>
+                        <div class="seller-item">
+                            <div class="seller-info">
+                                <span class="seller-name">Amazon</span>
+                                <span class="seller-rating">★★★★☆ (4.6)</span>
+                            </div>
+                            <div class="seller-price">$2,299</div>
+                            <button class="btn-primary seller-buy">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="product-actions">
+                    <button class="btn-primary btn-large">Add to Cart</button>
+                    <button class="btn-secondary btn-large">Add to Compare</button>
+                    <button class="btn-outline btn-large">Save for Later</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Similar Products -->
+        <section class="similar-products">
+            <div class="container">
+                <h3 class="section-title">Similar Products</h3>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=300&h=200&fit=crop&crop=center" alt="MacBook Air" onerror="this.src='https://via.placeholder.com/300x200/059669/FFFFFF?text=MacBook+Air'">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">MacBook Air 15"</h4>
+                            <p class="product-spec">M2 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,299</div>
+                            <button class="btn-secondary">Compare</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=200&fit=crop&crop=center" alt="Dell XPS 16" onerror="this.src='https://via.placeholder.com/300x200/DC2626/FFFFFF?text=Dell+XPS+16'">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Dell XPS 16</h4>
+                            <p class="product-spec">i7 • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$1,899</div>
+                            <button class="btn-secondary">Compare</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=300&h=200&fit=crop&crop=center" alt="HP EliteBook" onerror="this.src='https://via.placeholder.com/300x200/7C3AED/FFFFFF?text=HP+EliteBook'">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">HP EliteBook 16"</h4>
+                            <p class="product-spec">i7 • 16GB RAM • 1TB SSD</p>
+                            <div class="product-price">$1,599</div>
+                            <button class="btn-secondary">Compare</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">TechMarket</h4>
+                    <p class="footer-desc">Your trusted tech marketplace</p>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-subtitle">Team Members</h5>
+                    <ul class="footer-list">
+                        <li>Mirzanov Temirlan</li>
+                        <li>Toilybekov Assylkhan</li>
+                        <li>Aitimbet Baknur</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-text">Copyright © 2025 TAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
