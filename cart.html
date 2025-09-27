@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart & Checkout - TechMarket</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <img class="logo-img" src="logo.png" alt="logo">
+                <div class="nav-brand">
+                    <h1 class="logo">TechMarket</h1>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="catalog.html" class="nav-link">Catalog</a>
+                    <a href="comparison.html" class="nav-link">Compare</a>
+                    <a href="cart.html" class="nav-link active">Cart</a>
+                    <a href="profile.html" class="nav-link">Profile</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="search-btn">
+                        <div id="search-icon"></div>
+                    </button>
+                    <button class="menu-btn">
+                        <div id="menu-icon"></div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="checkout-container">
+            <!-- Progress Steps -->
+            <div class="checkout-progress">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Cart</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Delivery</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+
+            <div class="checkout-content">
+                <!-- Cart Items -->
+                <section class="cart-section">
+                    <h2 class="section-title">Shopping Cart</h2>
+                    
+                    <div class="cart-items">
+                        <div class="cart-item" data-product="macbook">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100&h=80&fit=crop&crop=center" alt="MacBook Pro" onerror="this.src='https://via.placeholder.com/100x80/4F46E5/FFFFFF?text=MacBook+Pro'">
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-title">MacBook Pro 16" with M3 Pro chip</h4>
+                                <p class="item-spec">M3 Pro • 16GB RAM • 512GB SSD</p>
+                                <div class="item-seller">Sold by: Apple Store</div>
+                            </div>
+                            <div class="item-quantity">
+                                <button class="quantity-btn">-</button>
+                                <span class="quantity-value">1</span>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                            <div class="item-price">$2,499</div>
+                            <button class="remove-btn">×</button>
+                        </div>
+
+                        <div class="cart-item" data-product="iphone">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100&h=80&fit=crop&crop=center" alt="iPhone 15" onerror="this.src='https://via.placeholder.com/100x80/059669/FFFFFF?text=iPhone+15'">
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-title">iPhone 15 Pro 128GB</h4>
+                                <p class="item-spec">A17 Pro • 128GB • Titanium</p>
+                                <div class="item-seller">Sold by: Best Buy</div>
+                            </div>
+                            <div class="item-quantity">
+                                <button class="quantity-btn">-</button>
+                                <span class="quantity-value">2</span>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                            <div class="item-price">$1,998</div>
+                            <button class="remove-btn">×</button>
+                        </div>
+
+                        <div class="cart-item" data-product="tv">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=100&h=80&fit=crop&crop=center" alt="Samsung TV" onerror="this.src='https://via.placeholder.com/100x80/DC2626/FFFFFF?text=Samsung+TV'">
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-title">Samsung QLED 65" Smart TV</h4>
+                                <p class="item-spec">4K • HDR10+ • Smart TV</p>
+                                <div class="item-seller">Sold by: Amazon</div>
+                            </div>
+                            <div class="item-quantity">
+                                <button class="quantity-btn">-</button>
+                                <span class="quantity-value">1</span>
+                                <button class="quantity-btn">+</button>
+                            </div>
+                            <div class="item-price">$1,299</div>
+                            <button class="remove-btn">×</button>
+                        </div>
+                    </div>
+
+                    <div class="cart-actions">
+                        <button class="btn-outline">Continue Shopping</button>
+                        <button class="btn-secondary">Clear Cart</button>
+                    </div>
+                </section>
+
+                <!-- Order Summary -->
+                <aside class="order-summary">
+                    <h3 class="summary-title">Order Summary</h3>
+                    
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal (4 items)</span>
+                            <span class="summary-value">$5,796</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping</span>
+                            <span class="summary-value">$0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Tax</span>
+                            <span class="summary-value">$463.68</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total</span>
+                            <span class="summary-value">$6,259.68</span>
+                        </div>
+                    </div>
+
+                    <div class="shipping-info">
+                        <h4 class="shipping-title">Shipping Information</h4>
+                        <p class="shipping-text">Free shipping on orders over $500</p>
+                        <p class="shipping-text">Estimated delivery: 2-3 business days</p>
+                    </div>
+
+                    <div class="promo-code">
+                        <h4 class="promo-title">Promo Code</h4>
+                        <div class="promo-input-group">
+                            <input type="text" class="promo-input" placeholder="Enter code">
+                            <button class="btn-outline promo-btn">Apply</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary btn-large checkout-btn">
+                        Proceed to Delivery
+                    </button>
+
+                    <div class="security-info">
+                        <div class="security-item">
+                            <span class="security-icon lock-icon"></span>
+                            <span class="security-text">Secure checkout</span>
+                        </div>
+                        <div class="security-item">
+                            <span class="security-icon return-icon"></span>
+                            <span class="security-text">30-day returns</span>
+                        </div>
+                        <div class="security-item">
+                            <span class="security-icon shipping-icon"></span>
+                            <span class="security-text">Free shipping</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">TechMarket</h4>
+                    <p class="footer-desc">Your trusted tech marketplace</p>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-subtitle">Team Members</h5>
+                    <ul class="footer-list">
+                        <li>Mirzanov Temirlan</li>
+                        <li>Toilybekov Assylkhan</li>
+                        <li>Aitimbet Baknur</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-text">Copyright © 2025 TAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

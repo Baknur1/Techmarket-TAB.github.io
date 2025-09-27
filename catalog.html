@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog - TechMarket</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <img class="logo-img" src="logo.png" alt="logo">
+                <div class="nav-brand">
+                    <h1 class="logo">TechMarket</h1>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="catalog.html" class="nav-link active">Catalog</a>
+                    <a href="comparison.html" class="nav-link">Compare</a>
+                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="profile.html" class="nav-link">Profile</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="search-btn">
+                        <div id="search-icon"></div>
+                    </button>
+                    <button class="menu-btn">
+                        <div id="menu-icon"></div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="catalog-container">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <h3 class="filters-title">Filters</h3>
+                
+                <!-- Price Range -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Price Range</h4>
+                    <div class="price-inputs">
+                        <input type="number" class="price-input" placeholder="Min" id="minPrice">
+                        <span class="price-separator">-</span>
+                        <input type="number" class="price-input" placeholder="Max" id="maxPrice">
+                    </div>
+                </div>
+
+                <!-- RAM Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">RAM</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="8">
+                            <span class="checkmark"></span>
+                            8GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="16">
+                            <span class="checkmark"></span>
+                            16GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="32">
+                            <span class="checkmark"></span>
+                            32GB
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Storage Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Storage</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="256">
+                            <span class="checkmark"></span>
+                            256GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="512">
+                            <span class="checkmark"></span>
+                            512GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="1024">
+                            <span class="checkmark"></span>
+                            1TB
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Brand</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="apple">
+                            <span class="checkmark"></span>
+                            Apple
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="samsung">
+                            <span class="checkmark"></span>
+                            Samsung
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="dell">
+                            <span class="checkmark"></span>
+                            Dell
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-secondary filter-apply">Apply Filters</button>
+                <button class="btn-outline filter-clear">Clear All</button>
+            </aside>
+
+            <!-- Products Section -->
+            <section class="products-section">
+                <div class="products-header">
+                    <h2 class="products-title">Laptops</h2>
+                    <div class="products-controls">
+                        <select class="sort-select">
+                            <option value="best-match">Best Match</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="newest">Newest</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                        <span class="results-count">24 products found</span>
+                    </div>
+                </div>
+
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=300&h=200&fit=crop&crop=center" alt="MacBook Pro 16-inch laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">MacBook Pro 16"</h4>
+                            <p class="product-spec">M3 Pro • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$2,499</div>
+                            <div class="product-actions">
+                                <button class="btn-primary"> <a href="product.html">View Details</a></button>
+                                <button class="btn-secondary">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=200&fit=crop&crop=center" alt="Dell XPS 15 laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Dell XPS 15</h4>
+                            <p class="product-spec">i7 • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$1,899</div>
+                            <div class="product-actions">
+                                <button class="btn-primary">View Details</button>
+                                <button class="btn-secondary">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=300&h=200&fit=crop&crop=center" alt="HP Spectre x360 laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">HP Spectre x360</h4>
+                            <p class="product-spec">i5 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,299</div>
+                            <div class="product-actions">
+                                <button class="btn-primary">View Details</button>
+                                <button class="btn-secondary">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn disabled">Previous</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Floating Compare Button -->
+        <div class="floating-compare">
+            <button class="btn-primary compare-btn">
+                Compare Products (2)
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">TechMarket</h4>
+                    <p class="footer-desc">Your trusted tech marketplace</p>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-subtitle">Team Members</h5>
+                    <ul class="footer-list">
+                        <li>Mirzanov Temirlan</li>
+                        <li>Toilybekov Assylkhan</li>
+                        <li>Aitimbet Baknur</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-text">Copyright © 2025 TAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
