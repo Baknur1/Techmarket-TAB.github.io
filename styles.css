@@ -19,6 +19,13 @@ body {
         "footer";
 }
 
+.greeting-text {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    opacity: 0.85;
+}
+
+
 /* CSS Variables for Cool Dark Theme */
 :root {
     /* Primary Colors */
@@ -179,7 +186,6 @@ a:hover {
 }
 
 .carousel-caption {
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
     border-radius: var(--radius-md);
     padding: 1rem;
 }
@@ -2825,4 +2831,125 @@ p.footer-desc {
     60% {
         transform: translateY(-5px);
     }
+}
+
+/* ===== MODAL + BLUR EFFECT ===== */
+
+/* Размытие основного контента, когда открыта модалка */
+body.modal-open-blur main {
+    filter: blur(8px);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Общий overlay */
+.modal-overlay.review-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.65);
+    z-index: 9999;
+    padding: 20px;
+}
+
+/* Анимация появления */
+.modal-overlay.review-modal.show {
+    display: flex;
+    animation: fadeIn .25s ease;
+}
+
+/* Контейнер модалки */
+.review-modal-content {
+    width: 720px;
+    max-width: calc(100% - 40px);
+    background: #141a22;
+    color: #fff;
+    border-radius: 10px;
+    padding: 18px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+}
+
+/* Шапка модалки */
+.review-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Крестик */
+.close-review-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.close-review-btn:hover {
+    color: #a3a3a3;
+}
+
+/* Картинка */
+.review-modal-image {
+    width: 100%;
+    border-radius: 10px;
+    margin: 12px 0;
+    object-fit: cover;
+}
+
+/* Текст с отступом */
+.review-modal-text {
+    line-height: 1.6;
+    font-size: 0.98rem;
+}
+
+/* Подсветка ключевого абзаца (опционально) */
+.read-more-highlight {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid rgba(255,255,255,0.20);
+    border-radius: 6px;
+}
+
+/* ===== Theme notification ===== */
+.theme-notification {
+    position: fixed;
+    top: -60px;
+    right: 20px;
+    z-index: 1200;
+    transition: all 0.3s ease;
+}
+.theme-notification.show {
+    top: 150px;
+}
+.notification-content {
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(6px);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(.97); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .review-modal-content {
+        width: 100%;
+        max-height: 90vh;
+        padding: 16px;
+    }
+}
+
+.review-modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Edge, Safari */
 }
