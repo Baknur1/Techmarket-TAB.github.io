@@ -1,9 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize features
   initializeFormValidation();
   initializeAccordion();
-  initializeSubscriptionPopup();
   initializeThemeChanger();
   initializeDateTimeDisplay();
   initAutoReadMoreAndModal(); // main new feature
@@ -361,6 +359,7 @@ function updateDateTime() {
   if (tze) tze.textContent = tz;
 }
 
+
 /* ===========================
    Read More 
    =========================== */
@@ -492,11 +491,7 @@ function initAutoReadMoreAndModal() {
         <p>Best suited for professionals who need a Windows-based workstation with high display quality, good portability and powerful specs for content creation or development.</p>
     `}
   ];
-.modal-overlay.active .modal-content {
-    transform: scale(1);
-    opacity: 1;
-    transition: all 0.3s ease-in-out;
-}
+
 
   const ReviewHandler = {
     open(id) {
@@ -596,23 +591,7 @@ const Subscription = {
 /* ===========================
    Products render (arrays + map example)
    =========================== */
-const products = [
-  { id: 1, title: 'MacBook Pro 16"', price: 2499 },
-  { id: 2, title: 'iPhone 15 Pro', price: 1099 },
-  { id: 3, title: 'Dell XPS 15', price: 1799 }
-];
 
-function renderProductsIfNeeded(selector) {
-  const container = document.querySelector(selector);
-  if (!container) return;
-  container.innerHTML = products.map(p => `
-    <div class="product-card" data-id="${p.id}">
-      <h4>${p.title}</h4>
-      <p>$${p.price}</p>
-      <button class="btn btn-sm buy-btn">Buy</button>
-    </div>
-  `).join('');
-}
 
 /* ===========================
    Switch-case demo (category)
@@ -1028,7 +1007,7 @@ function injectAdditionalStyles() {
         /* Date Time Display Styles */
         .datetime-container {
             position: absolute;
-            top: 20px;
+            top: 90px;
             left: 20px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -1095,6 +1074,1571 @@ function injectAdditionalStyles() {
 
 // Initialize additional styles when DOM is loaded
 document.addEventListener('DOMContentLoaded', injectAdditionalStyles);
+
+// ========================================
+// JQUERY FEATURES IMPLEMENTATION
+// ========================================
+
+$(document).ready(function() {
+    // Initialize all jQuery features
+    initRealTimeSearch();
+    initAutocompleteSearch();
+    initSearchHighlighting();
+    initScrollProgressBar();
+    initAnimatedCounters();
+    initLoadingSpinner();
+    initNotificationSystem();
+    initCopyToClipboard();
+    initLazyLoading();
+    
+    // Initialize catalog page immediately
+    if (window.location.pathname.includes('catalog.html')) {
+        console.log('Initializing catalog page...');
+        
+        // Show all product cards
+        $('.product-card').show();
+        
+        // Update results count
+        const visibleCount = $('.product-card:visible').length;
+        $('.results-count').text(visibleCount + ' products found');
+        
+        // Add to Cart functionality
+        $('.add-to-cart-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            showNotification(productName + ' added to cart!', 'success');
+            
+            // Add animation effect
+            $(this).html('✓ Added').addClass('btn-success');
+            setTimeout(() => {
+                $(this).html('Add to Cart').removeClass('btn-success');
+            }, 2000);
+        });
+        
+        // Compare functionality
+        $('.compare-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected').text('Compare');
+                showNotification(productName + ' removed from comparison', 'info');
+            } else {
+                $(this).addClass('selected').text('Remove');
+                showNotification(productName + ' added to comparison', 'success');
+            }
+        });
+        
+        // View Details functionality
+        $('.btn-primary').on('click', function() {
+            if ($(this).text() === 'View Details') {
+                const $card = $(this).closest('.product-card');
+                const productName = $card.find('.product-title').text();
+                showNotification('Opening details for ' + productName, 'info');
+            }
+        });
+        
+        console.log('Catalog page initialized with ' + visibleCount + ' products');
+    }
+});
+
+// ========================================
+// TASK 1: Real-time Search and Live Filter
+// ========================================
+function initRealTimeSearch() {
+    // Add search functionality to existing search input
+    $('.search-container input').on('keyup', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        
+        // Filter product cards
+        $('.product-card, .card').each(function() {
+            const cardText = $(this).text().toLowerCase();
+            if (cardText.includes(searchTerm) || searchTerm === '') {
+                $(this).show().addClass('search-match');
+            } else {
+                $(this).hide().removeClass('search-match');
+            }
+        });
+        
+        // Filter FAQ items
+        $('.accordion-item').each(function() {
+            const faqText = $(this).text().toLowerCase();
+            if (faqText.includes(searchTerm) || searchTerm === '') {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        
+        // Show/hide "no results" message
+        const visibleItems = $('.product-card:visible, .card:visible, .accordion-item:visible').length;
+        if (searchTerm !== '' && visibleItems === 0) {
+            if ($('#no-results').length === 0) {
+                $('.search-container').after('<div id="no-results" class="alert alert-info mt-3">No results found for "' + searchTerm + '"</div>');
+            }
+        } else {
+            $('#no-results').remove();
+        }
+    });
+}
+
+// ========================================
+// PAGE-SPECIFIC FUNCTIONALITY
+// ========================================
+
+// Catalog Page Functions
+function initCatalogPage() {
+    if ($('#catalogSearch').length > 0) {
+        // Catalog-specific search
+        $('#catalogSearch').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            
+            $('.product-card').each(function() {
+                const cardText = $(this).text().toLowerCase();
+                if (cardText.includes(searchTerm) || searchTerm === '') {
+                    $(this).show().addClass('search-match');
+                } else {
+                    $(this).hide().removeClass('search-match');
+                }
+            });
+            
+            // Update results count
+            const visibleCount = $('.product-card:visible').length;
+            $('.results-count').text(visibleCount + ' products found');
+        });
+        
+        // Filter functionality
+        $('.filter-apply').on('click', function() {
+            showNotification('Filters applied successfully!', 'success');
+        });
+        
+        $('.filter-clear').on('click', function() {
+            $('input[type="checkbox"]').prop('checked', false);
+            $('input[type="number"]').val('');
+            showNotification('All filters cleared!', 'info');
+        });
+        
+        // Compare functionality
+        $('.compare-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected').text('Compare');
+                showNotification(productName + ' removed from comparison', 'info');
+            } else {
+                $(this).addClass('selected').text('Remove');
+                showNotification(productName + ' added to comparison', 'success');
+            }
+        });
+    }
+}
+
+// Cart Page Functions
+function initCartPage() {
+    if ($('.cart-item').length > 0) {
+        // Quantity controls
+        $('.quantity-btn').on('click', function() {
+            const $btn = $(this);
+            const $item = $btn.closest('.cart-item');
+            const $quantity = $item.find('.quantity-value');
+            const $price = $item.find('.item-price');
+            const currentQty = parseInt($quantity.text());
+            const basePrice = parseFloat($price.text().replace('$', '').replace(',', ''));
+            
+            if ($btn.text() === '+' && currentQty < 10) {
+                const newQty = currentQty + 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty > 1) {
+                const newQty = currentQty - 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            }
+        });
+        
+        // Remove items
+        $('.remove-btn').on('click', function() {
+            const $item = $(this).closest('.cart-item');
+            const productName = $item.find('.item-title').text();
+            
+            $item.fadeOut(300, function() {
+                $(this).remove();
+                updateCartTotal();
+                showNotification(productName + ' removed from cart', 'info');
+            });
+        });
+        
+        // Promo code
+        $('.promo-btn').on('click', function() {
+            const code = $('.promo-input').val().toUpperCase();
+            const validCodes = ['SAVE10', 'WELCOME20', 'TECH15'];
+            
+            if (validCodes.includes(code)) {
+                showNotification('Promo code applied! 10% discount', 'success');
+                $('.promo-input').val('');
+            } else {
+                showNotification('Invalid promo code', 'error');
+            }
+        });
+    }
+}
+
+function updateCartTotal() {
+    let total = 0;
+    $('.cart-item').each(function() {
+        const price = parseFloat($(this).find('.item-price').text().replace('$', '').replace(',', ''));
+        total += price;
+    });
+    
+    const tax = total * 0.08;
+    const finalTotal = total + tax;
+    
+    $('.summary-row').eq(0).find('.summary-value').text('$' + total.toLocaleString());
+    $('.summary-row').eq(2).find('.summary-value').text('$' + tax.toFixed(2));
+    $('.summary-row.total .summary-value').text('$' + finalTotal.toFixed(2));
+}
+
+function clearCart() {
+    if (confirm('Are you sure you want to clear your cart?')) {
+        $('.cart-item').fadeOut(300, function() {
+            $(this).remove();
+        });
+        showNotification('Cart cleared successfully', 'success');
+        setTimeout(() => {
+            $('.results-count').text('0 products found');
+        }, 300);
+    }
+}
+
+function proceedToCheckout() {
+    showNotification('Redirecting to checkout...', 'info');
+    setTimeout(() => {
+        showNotification('Checkout page would open here', 'success');
+    }, 1000);
+}
+
+// Product Page Functions
+function initProductPage() {
+    if ($('.product-container').length > 0) {
+        // Image thumbnail switching
+        $('.thumbnail').on('click', function() {
+            const newSrc = $(this).attr('src').replace('100x100', '600x400');
+            $('#mainImage').attr('src', newSrc);
+            
+            $('.thumbnail').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        // Specifications toggle
+        $('.specs-toggle').on('click', function() {
+            const $specs = $('#allSpecs');
+            if ($specs.is(':visible')) {
+                $specs.slideUp();
+                $(this).text('View All Specifications');
+            } else {
+                $specs.slideDown();
+                $(this).text('Hide Specifications');
+            }
+        });
+        
+        // Seller buy buttons
+        $('.seller-buy').on('click', function() {
+            const sellerName = $(this).closest('.seller-item').find('.seller-name').text();
+            showNotification('Redirecting to ' + sellerName + '...', 'info');
+        });
+    }
+}
+
+function addToCart() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to cart!', 'success');
+}
+
+function addToCompare() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to comparison', 'success');
+}
+
+function saveForLater() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' saved for later', 'success');
+}
+
+// Initialize page-specific functions
+$(document).ready(function() {
+    // Check which page we're on and initialize appropriate functions
+    if (window.location.pathname.includes('catalog.html')) {
+        initCatalogPage();
+    } else if (window.location.pathname.includes('cart.html')) {
+        initCartPage();
+    } else if (window.location.pathname.includes('product.html')) {
+        initProductPage();
+    }
+});
+
+// ========================================
+// TASK 2: Autocomplete Search Suggestions
+// ========================================
+function initAutocompleteSearch() {
+    const suggestions = [
+        'MacBook Pro', 'iPhone 15', 'Dell XPS', 'Samsung Galaxy', 'iPad Pro',
+        'Sony WH-1000XM5', 'Apple Watch', 'AirPods Pro', 'laptop', 'smartphone',
+        'tablet', 'headphones', 'smartwatch'
+    ];
+    
+    // Create autocomplete dropdown
+    const autocompleteHtml = '<div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>';
+    $('.search-container').append(autocompleteHtml);
+    
+    $('.search-container input').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        const filteredSuggestions = suggestions.filter(item => 
+            item.toLowerCase().includes(searchTerm)
+        ).slice(0, 5);
+        
+        if (searchTerm.length > 0 && filteredSuggestions.length > 0) {
+            let dropdownHtml = '';
+            filteredSuggestions.forEach(suggestion => {
+                dropdownHtml += `<div class="autocomplete-item" data-suggestion="${suggestion}">${suggestion}</div>`;
+            });
+            $('#autocomplete-dropdown').html(dropdownHtml).show();
+        } else {
+            $('#autocomplete-dropdown').hide();
+        }
+    });
+    
+    // Handle suggestion clicks
+    $(document).on('click', '.autocomplete-item', function() {
+        const suggestion = $(this).data('suggestion');
+        $('.search-container input').val(suggestion);
+        $('#autocomplete-dropdown').hide();
+        $('.search-container input').trigger('keyup');
+    });
+    
+    // Hide dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.search-container').length) {
+            $('#autocomplete-dropdown').hide();
+        }
+    });
+}
+
+// ========================================
+// PAGE-SPECIFIC FUNCTIONALITY
+// ========================================
+
+// Catalog Page Functions
+function initCatalogPage() {
+    if ($('#catalogSearch').length > 0) {
+        // Catalog-specific search
+        $('#catalogSearch').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            
+            $('.product-card').each(function() {
+                const cardText = $(this).text().toLowerCase();
+                if (cardText.includes(searchTerm) || searchTerm === '') {
+                    $(this).show().addClass('search-match');
+                } else {
+                    $(this).hide().removeClass('search-match');
+                }
+            });
+            
+            // Update results count
+            const visibleCount = $('.product-card:visible').length;
+            $('.results-count').text(visibleCount + ' products found');
+        });
+        
+        // Filter functionality
+        $('.filter-apply').on('click', function() {
+            showNotification('Filters applied successfully!', 'success');
+        });
+        
+        $('.filter-clear').on('click', function() {
+            $('input[type="checkbox"]').prop('checked', false);
+            $('input[type="number"]').val('');
+            showNotification('All filters cleared!', 'info');
+        });
+        
+        // Compare functionality
+        $('.compare-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected').text('Compare');
+                showNotification(productName + ' removed from comparison', 'info');
+            } else {
+                $(this).addClass('selected').text('Remove');
+                showNotification(productName + ' added to comparison', 'success');
+            }
+        });
+    }
+}
+
+// Cart Page Functions
+function initCartPage() {
+    if ($('.cart-item').length > 0) {
+        // Quantity controls
+        $('.quantity-btn').on('click', function() {
+            const $btn = $(this);
+            const $item = $btn.closest('.cart-item');
+            const $quantity = $item.find('.quantity-value');
+            const $price = $item.find('.item-price');
+            const currentQty = parseInt($quantity.text());
+            const basePrice = parseFloat($price.text().replace('$', '').replace(',', ''));
+            
+            if ($btn.text() === '+' && currentQty < 10) {
+                const newQty = currentQty + 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty > 1) {
+                const newQty = currentQty - 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            }
+        });
+        
+        // Remove items
+        $('.remove-btn').on('click', function() {
+            const $item = $(this).closest('.cart-item');
+            const productName = $item.find('.item-title').text();
+            
+            $item.fadeOut(300, function() {
+                $(this).remove();
+                updateCartTotal();
+                showNotification(productName + ' removed from cart', 'info');
+            });
+        });
+        
+        // Promo code
+        $('.promo-btn').on('click', function() {
+            const code = $('.promo-input').val().toUpperCase();
+            const validCodes = ['SAVE10', 'WELCOME20', 'TECH15'];
+            
+            if (validCodes.includes(code)) {
+                showNotification('Promo code applied! 10% discount', 'success');
+                $('.promo-input').val('');
+            } else {
+                showNotification('Invalid promo code', 'error');
+            }
+        });
+    }
+}
+
+function updateCartTotal() {
+    let total = 0;
+    $('.cart-item').each(function() {
+        const price = parseFloat($(this).find('.item-price').text().replace('$', '').replace(',', ''));
+        total += price;
+    });
+    
+    const tax = total * 0.08;
+    const finalTotal = total + tax;
+    
+    $('.summary-row').eq(0).find('.summary-value').text('$' + total.toLocaleString());
+    $('.summary-row').eq(2).find('.summary-value').text('$' + tax.toFixed(2));
+    $('.summary-row.total .summary-value').text('$' + finalTotal.toFixed(2));
+}
+
+function clearCart() {
+    if (confirm('Are you sure you want to clear your cart?')) {
+        $('.cart-item').fadeOut(300, function() {
+            $(this).remove();
+        });
+        showNotification('Cart cleared successfully', 'success');
+        setTimeout(() => {
+            $('.results-count').text('0 products found');
+        }, 300);
+    }
+}
+
+function proceedToCheckout() {
+    showNotification('Redirecting to checkout...', 'info');
+    setTimeout(() => {
+        showNotification('Checkout page would open here', 'success');
+    }, 1000);
+}
+
+// Product Page Functions
+function initProductPage() {
+    if ($('.product-container').length > 0) {
+        // Image thumbnail switching
+        $('.thumbnail').on('click', function() {
+            const newSrc = $(this).attr('src').replace('100x100', '600x400');
+            $('#mainImage').attr('src', newSrc);
+            
+            $('.thumbnail').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        // Specifications toggle
+        $('.specs-toggle').on('click', function() {
+            const $specs = $('#allSpecs');
+            if ($specs.is(':visible')) {
+                $specs.slideUp();
+                $(this).text('View All Specifications');
+            } else {
+                $specs.slideDown();
+                $(this).text('Hide Specifications');
+            }
+        });
+        
+        // Seller buy buttons
+        $('.seller-buy').on('click', function() {
+            const sellerName = $(this).closest('.seller-item').find('.seller-name').text();
+            showNotification('Redirecting to ' + sellerName + '...', 'info');
+        });
+    }
+}
+
+function addToCart() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to cart!', 'success');
+}
+
+function addToCompare() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to comparison', 'success');
+}
+
+function saveForLater() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' saved for later', 'success');
+}
+
+// Initialize page-specific functions
+$(document).ready(function() {
+    // Check which page we're on and initialize appropriate functions
+    if (window.location.pathname.includes('catalog.html')) {
+        initCatalogPage();
+    } else if (window.location.pathname.includes('cart.html')) {
+        initCartPage();
+    } else if (window.location.pathname.includes('product.html')) {
+        initProductPage();
+    }
+});
+
+// ========================================
+// TASK 3: Search Highlighting
+// ========================================
+function initSearchHighlighting() {
+    let originalContent = {};
+    
+    $('.search-container input').on('keyup', function() {
+        const searchTerm = $(this).val().trim();
+        
+        if (searchTerm === '') {
+            // Restore original content
+            Object.keys(originalContent).forEach(selector => {
+                $(selector).html(originalContent[selector]);
+            });
+            originalContent = {};
+            return;
+        }
+        
+        // Store original content if not already stored
+        $('.card-text, .accordion-content p, .hero-description').each(function() {
+            const selector = '#' + $(this).attr('id') || '.card-text, .accordion-content p, .hero-description';
+            if (!originalContent[selector]) {
+                originalContent[selector] = $(this).html();
+            }
+        });
+        
+        // Highlight matching text
+        $('.card-text, .accordion-content p, .hero-description').each(function() {
+            const originalText = originalContent['#' + $(this).attr('id')] || $(this).text();
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            const highlightedText = originalText.replace(regex, '<mark class="search-highlight">$1</mark>');
+            $(this).html(highlightedText);
+        });
+    });
+}
+
+// ========================================
+// TASK 4: Colorful Scroll Progress Bar
+// ========================================
+function initScrollProgressBar() {
+    // Create progress bar
+    const progressBarHtml = `
+        <div id="scroll-progress-container">
+            <div id="scroll-progress-bar"></div>
+            <div id="scroll-progress-text">0%</div>
+        </div>
+    `;
+    $('body').append(progressBarHtml);
+    
+    $(window).on('scroll', function() {
+        const scrollTop = $(window).scrollTop();
+        const docHeight = $(document).height();
+        const winHeight = $(window).height();
+        const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+        
+        $('#scroll-progress-bar').css('width', scrollPercent + '%');
+        $('#scroll-progress-text').text(Math.round(scrollPercent) + '%');
+        
+        // Change color based on scroll percentage
+        if (scrollPercent < 25) {
+            $('#scroll-progress-bar').css('background', 'linear-gradient(90deg, #ff6b6b, #ff8e8e)');
+        } else if (scrollPercent < 50) {
+            $('#scroll-progress-bar').css('background', 'linear-gradient(90deg, #4ecdc4, #6dd5ed)');
+        } else if (scrollPercent < 75) {
+            $('#scroll-progress-bar').css('background', 'linear-gradient(90deg, #45b7d1, #96c7ed)');
+        } else {
+            $('#scroll-progress-bar').css('background', 'linear-gradient(90deg, #f9ca24, #f0932b)');
+        }
+    });
+}
+
+// ========================================
+// PAGE-SPECIFIC FUNCTIONALITY
+// ========================================
+
+// Catalog Page Functions
+function initCatalogPage() {
+    if ($('#catalogSearch').length > 0) {
+        // Catalog-specific search
+        $('#catalogSearch').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            
+            $('.product-card').each(function() {
+                const cardText = $(this).text().toLowerCase();
+                if (cardText.includes(searchTerm) || searchTerm === '') {
+                    $(this).show().addClass('search-match');
+                } else {
+                    $(this).hide().removeClass('search-match');
+                }
+            });
+            
+            // Update results count
+            const visibleCount = $('.product-card:visible').length;
+            $('.results-count').text(visibleCount + ' products found');
+        });
+        
+        // Filter functionality
+        $('.filter-apply').on('click', function() {
+            showNotification('Filters applied successfully!', 'success');
+        });
+        
+        $('.filter-clear').on('click', function() {
+            $('input[type="checkbox"]').prop('checked', false);
+            $('input[type="number"]').val('');
+            showNotification('All filters cleared!', 'info');
+        });
+        
+        // Compare functionality
+        $('.compare-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected').text('Compare');
+                showNotification(productName + ' removed from comparison', 'info');
+            } else {
+                $(this).addClass('selected').text('Remove');
+                showNotification(productName + ' added to comparison', 'success');
+            }
+        });
+    }
+}
+
+function initfilterFunctionality() {
+
+    // Select all product cards and the counter element
+    const cards = document.querySelectorAll('.product-card');
+    const counter = document.querySelector('.results-count');
+
+    function applyFilters() {
+        // 1. Get Price Range (Assuming you still have minPrice/maxPrice inputs)
+        // Если у вас нет инпутов для цены, закомментируйте эти строки.
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        
+        // Получаем значение цены. В HTML цена находится в теге <div>. 
+        // Мы будем использовать data-price, если вы его добавили, иначе парсим из текста.
+        // Если вы не фильтруете по цене, оставьте 0 и Infinity.
+        const minPrice = minPriceInput ? parseFloat(minPriceInput.value) || 0 : 0;
+        const maxPrice = maxPriceInput ? parseFloat(maxPriceInput.value) || Infinity : Infinity;
+
+        // 2. Get Selected Checkboxes for CATEGORY, BRAND, RAM, and STORAGE
+        
+        // Category
+        const categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+        const selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value.toLowerCase()); // Важно: приводим к нижнему регистру для сравнения
+
+        // Brand
+        const brandCheckboxes = document.querySelectorAll('input[name="brand"]:checked');
+        const selectedBrands = Array.from(brandCheckboxes).map(cb => cb.value.toLowerCase());
+        
+        // RAM
+        const ramCheckboxes = document.querySelectorAll('input[name="ram"]:checked');
+        const selectedRAMs = Array.from(ramCheckboxes).map(cb => cb.value); // RAM у вас в виде "6", "12", "32"
+
+        // Storage
+        const storageCheckboxes = document.querySelectorAll('input[name="storage"]:checked');
+        const selectedStorages = Array.from(storageCheckboxes).map(cb => cb.value); // Storage у вас в виде "128", "256", "512"
+
+
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            // Read product data from the data-attributes
+            // .toLowerCase() для категорий и брендов, чтобы избежать ошибок из-за регистра
+            const productPriceText = card.querySelector('.product-price').textContent.replace('$', '').replace(',', '').trim();
+            const productPrice = parseFloat(productPriceText) || 0; // Получаем цену из текста, если нет data-price
+            
+            const productCategory = card.getAttribute('data-category');
+            const productBrand = card.getAttribute('data-brand');
+            const productRAM = card.getAttribute('data-ram');
+            const productStorage = card.getAttribute('data-storage');
+            
+            // --- Check Matches ---
+            
+            // 1. Price Match
+            let isPriceMatch = productPrice >= minPrice && productPrice <= maxPrice;
+
+            // 2. Category Match
+            let isCategoryMatch = selectedCategories.length === 0 || selectedCategories.includes(productCategory);
+
+            // 3. Brand Match
+            let isBrandMatch = selectedBrands.length === 0 || selectedBrands.includes(productBrand);
+
+            // 4. RAM Match (сравниваем строковые значения, т.к. они взяты из data-атрибутов)
+            let isRAMMatch = selectedRAMs.length === 0 || selectedRAMs.includes(productRAM);
+            
+            // 5. Storage Match
+            let isStorageMatch = selectedStorages.length === 0 || selectedStorages.includes(productStorage);
+
+            // --- Final decision: MUST pass ALL enabled filters ---
+            if (isPriceMatch && isCategoryMatch && isBrandMatch && isRAMMatch && isStorageMatch) {
+                card.style.display = 'grid'; // Используем 'grid' или 'block' в зависимости от вашего CSS
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update the results count
+        if (counter) {
+            counter.textContent = visibleCount + ' products found';
+        }
+    }
+
+    // Function to handle clearing filters
+    function clearFiltersAndShowAll() {
+        // Clear all checkboxes
+        document.querySelectorAll('.filters-sidebar input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Clear number inputs (Price Range)
+        document.querySelectorAll('.filters-sidebar input[type="number"]').forEach(input => {
+            input.value = '';
+        });
+        
+        // Re-apply filters to ensure all are shown correctly
+        applyFilters(); 
+        
+        // (Опционально: можно добавить сюда уведомление)
+    }
+    
+    // Attach the new functions to the buttons
+    const filterApplyBtn = document.querySelector('.filter-apply');
+    if (filterApplyBtn) {
+        filterApplyBtn.addEventListener('click', applyFilters);
+    }
+
+    const filterClearBtn = document.querySelector('.filter-clear');
+    if (filterClearBtn) {
+        filterClearBtn.addEventListener('click', clearFiltersAndShowAll);
+    }
+    
+    // Add event listener to the whole sidebar for a better UX (фильтрация при клике на чекбокс)
+    const filtersSidebar = document.querySelector('.filters-sidebar');
+    if (filtersSidebar) {
+        filtersSidebar.addEventListener('change', (event) => {
+            // Запускаем фильтрацию, если изменено значение в инпуте цены или чекбоксе
+            if (event.target.type === 'number' || event.target.type === 'checkbox') {
+                applyFilters();
+            }
+        });
+    }
+}
+
+// Cart Page Functions
+function initCartPage() {
+    if ($('.cart-item').length > 0) {
+        // Quantity controls
+        $('.quantity-btn').on('click', function() {
+            const $btn = $(this);
+            const $item = $btn.closest('.cart-item');
+            const $quantity = $item.find('.quantity-value');
+            const $price = $item.find('.item-price');
+            const currentQty = parseInt($quantity.text());
+            const basePrice = parseFloat($price.text().replace('$', '').replace(',', ''));
+            
+            if ($btn.text() === '+' && currentQty < 10) {
+                const newQty = currentQty + 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty > 1) {
+                const newQty = currentQty - 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            }
+        });
+        
+        // Remove items
+        $('.remove-btn').on('click', function() {
+            const $item = $(this).closest('.cart-item');
+            const productName = $item.find('.item-title').text();
+            
+            $item.fadeOut(300, function() {
+                $(this).remove();
+                updateCartTotal();
+                showNotification(productName + ' removed from cart', 'info');
+            });
+        });
+        
+        // Promo code
+        $('.promo-btn').on('click', function() {
+            const code = $('.promo-input').val().toUpperCase();
+            const validCodes = ['SAVE10', 'WELCOME20', 'TECH15'];
+            
+            if (validCodes.includes(code)) {
+                showNotification('Promo code applied! 10% discount', 'success');
+                $('.promo-input').val('');
+            } else {
+                showNotification('Invalid promo code', 'error');
+            }
+        });
+    }
+}
+
+function updateCartTotal() {
+    let total = 0;
+    $('.cart-item').each(function() {
+        const price = parseFloat($(this).find('.item-price').text().replace('$', '').replace(',', ''));
+        total += price;
+    });
+    
+    const tax = total * 0.08;
+    const finalTotal = total + tax;
+    
+    $('.summary-row').eq(0).find('.summary-value').text('$' + total.toLocaleString());
+    $('.summary-row').eq(2).find('.summary-value').text('$' + tax.toFixed(2));
+    $('.summary-row.total .summary-value').text('$' + finalTotal.toFixed(2));
+}
+
+function clearCart() {
+    if (confirm('Are you sure you want to clear your cart?')) {
+        $('.cart-item').fadeOut(300, function() {
+            $(this).remove();
+        });
+        showNotification('Cart cleared successfully', 'success');
+        setTimeout(() => {
+            $('.results-count').text('0 products found');
+        }, 300);
+    }
+}
+
+function proceedToCheckout() {
+    showNotification('Redirecting to checkout...', 'info');
+    setTimeout(() => {
+        showNotification('Checkout page would open here', 'success');
+    }, 1000);
+}
+
+// Product Page Functions
+function initProductPage() {
+    if ($('.product-container').length > 0) {
+        // Image thumbnail switching
+        $('.thumbnail').on('click', function() {
+            const newSrc = $(this).attr('src').replace('100x100', '600x400');
+            $('#mainImage').attr('src', newSrc);
+            
+            $('.thumbnail').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        // Specifications toggle
+        $('.specs-toggle').on('click', function() {
+            const $specs = $('#allSpecs');
+            if ($specs.is(':visible')) {
+                $specs.slideUp();
+                $(this).text('View All Specifications');
+            } else {
+                $specs.slideDown();
+                $(this).text('Hide Specifications');
+            }
+        });
+        
+        // Seller buy buttons
+        $('.seller-buy').on('click', function() {
+            const sellerName = $(this).closest('.seller-item').find('.seller-name').text();
+            showNotification('Redirecting to ' + sellerName + '...', 'info');
+        });
+    }
+}
+
+function addToCart() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to cart!', 'success');
+}
+
+function addToCompare() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to comparison', 'success');
+}
+
+function saveForLater() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' saved for later', 'success');
+}
+
+// Initialize page-specific functions
+$(document).ready(function() {
+    // Check which page we're on and initialize appropriate functions
+    if (window.location.pathname.includes('catalog.html')) {
+        initCatalogPage();
+    } else if (window.location.pathname.includes('cart.html')) {
+        initCartPage();
+    } else if (window.location.pathname.includes('product.html')) {
+        initProductPage();
+    }
+});
+
+// ========================================
+// TASK 5: Animated Number Counter
+// ========================================
+function initAnimatedCounters() {
+    // Add counter elements to stats sections
+    const statsHtml = `
+        <section class="stats-section py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">Our Impact</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="1000">0</div>
+                        <div class="stat-label">Happy Customers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Products Sold</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Countries Served</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">% Satisfaction Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+    
+    $('.features').after(statsHtml);
+    
+    // Animate counters when they come into view
+    $(window).on('scroll', function() {
+        $('.stat-number').each(function() {
+            const $this = $(this);
+            const target = parseInt($this.data('target'));
+            const rect = this.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight && rect.bottom > 0 && !$this.hasClass('animated')) {
+                $this.addClass('animated');
+                animateCounter($this, target);
+            }
+        });
+    });
+}
+
+function animateCounter($element, target) {
+    let current = 0;
+    const increment = target / 100;
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        $element.text(Math.floor(current));
+    }, 20);
+}
+
+// ========================================
+// TASK 6: Loading Spinner on Submit
+// ========================================
+function initLoadingSpinner() {
+    $('.view-details-btn').on('click', function(e) {
+        // Предотвращаем стандартный переход по ссылке сразу
+        e.preventDefault(); 
+        
+        const $btn = $(this);
+        const $link = $btn.find('a'); // Находим вложенный тег <a> для перехода
+        const originalText = $link.text(); // Сохраняем оригинальный текст ('View Details')
+        const targetUrl = $link.attr('href'); // Сохраняем URL для перехода
+
+        $btn.prop('disabled', true);
+        $link.html('<span class="spinner"></span> Please wait...'); 
+        setTimeout(function() {
+            
+            $btn.prop('disabled', false);
+            $link.html(originalText);
+            window.location.href = targetUrl;
+        }, 2000); 
+    });
+}
+
+// ========================================
+// TASK 7: Notification System
+// ========================================
+function initNotificationSystem() {
+    // Create notification container
+    $('body').append('<div id="notification-container"></div>');
+}
+
+function showNotification(message, type = 'info') {
+    const notificationId = 'notification-' + Date.now();
+    const notificationHtml = `
+        <div id="${notificationId}" class="notification notification-${type}">
+            <div class="notification-content">
+                <span class="notification-icon">${getNotificationIcon(type)}</span>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close">&times;</button>
+            </div>
+        </div>
+    `;
+    
+    $('#notification-container').append(notificationHtml);
+    
+    // Show notification with animation
+    setTimeout(() => {
+        $(`#${notificationId}`).addClass('show');
+    }, 100);
+    
+    // Auto-hide after 4 seconds
+    setTimeout(() => {
+        hideNotification(notificationId);
+    }, 4000);
+    
+    // Manual close
+    $(`#${notificationId} .notification-close`).on('click', () => {
+        hideNotification(notificationId);
+    });
+}
+
+function hideNotification(notificationId) {
+    $(`#${notificationId}`).removeClass('show');
+    setTimeout(() => {
+        $(`#${notificationId}`).remove();
+    }, 300);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        success: '✓',
+        error: '✗',
+        warning: '⚠',
+        info: 'ℹ'
+    };
+    return icons[type] || icons.info;
+}
+
+// ========================================
+// TASK 8: Copied to Clipboard Button
+// ========================================
+function initCopyToClipboard() {
+    // Add copy buttons to code snippets and important text
+    $('.card-text, .accordion-content p').each(function() {
+        if ($(this).text().length > 50) {
+            const $copyBtn = $('<button class="copy-btn" title="Copy to clipboard">📋</button>');
+            $(this).append($copyBtn);
+        }
+    });
+    
+    // Handle copy functionality
+    $(document).on('click', '.copy-btn', function() {
+        const $btn = $(this);
+        const textToCopy = $btn.parent().text().replace('📋', '').trim();
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            // Show success feedback
+            $btn.html('✓').addClass('copied');
+            $btn.attr('title', 'Copied to clipboard!');
+            
+            setTimeout(() => {
+                $btn.html('📋').removeClass('copied');
+                $btn.attr('title', 'Copy to clipboard');
+            }, 2000);
+            
+            showNotification('Text copied to clipboard!', 'success');
+        }).catch(() => {
+            showNotification('Failed to copy text', 'error');
+        });
+    });
+}
+
+// ========================================
+// TASK 9: Image Lazy Loading
+// ========================================
+function initLazyLoading() {
+    // Add lazy loading to all images
+    $('img').each(function() {
+        const $img = $(this);
+        const src = $img.attr('src');
+        
+        if (src) {
+            $img.attr('data-src', src);
+            $img.attr('src', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+');
+            $img.addClass('lazy-load');
+        }
+    });
+    
+    // Load images when they come into view
+    $(window).on('scroll', function() {
+        $('.lazy-load').each(function() {
+            const $img = $(this);
+            const rect = this.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
+                const src = $img.attr('data-src');
+                if (src) {
+                    $img.attr('src', src);
+                    $img.removeClass('lazy-load');
+                }
+            }
+        });
+    });
+    
+    // Load images that are already visible
+    $('.lazy-load').each(function() {
+        const $img = $(this);
+        const rect = this.getBoundingClientRect();
+        
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            const src = $img.attr('data-src');
+            if (src) {
+                $img.attr('src', src);
+                $img.removeClass('lazy-load');
+            }
+        }
+    });
+}
+
+// ========================================
+// PAGE-SPECIFIC FUNCTIONALITY
+// ========================================
+
+// Catalog Page Functions
+function initCatalogPage() {
+    if ($('#catalogSearch').length > 0) {
+        // Catalog-specific search
+        $('#catalogSearch').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            
+            $('.product-card').each(function() {
+                const cardText = $(this).text().toLowerCase();
+                if (cardText.includes(searchTerm) || searchTerm === '') {
+                    $(this).show().addClass('search-match');
+                } else {
+                    $(this).hide().removeClass('search-match');
+                }
+            });
+            
+            // Update results count
+            const visibleCount = $('.product-card:visible').length;
+            $('.results-count').text(visibleCount + ' products found');
+        });
+        
+        // Filter functionality
+        $('.filter-apply').on('click', function() {
+            showNotification('Filters applied successfully!', 'success');
+        });
+        
+        $('.filter-clear').on('click', function() {
+            $('input[type="checkbox"]').prop('checked', false);
+            $('input[type="number"]').val('');
+            showNotification('All filters cleared!', 'info');
+        });
+        
+        // Compare functionality
+        $('.compare-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected').text('Compare');
+                showNotification(productName + ' removed from comparison', 'info');
+            } else {
+                $(this).addClass('selected').text('Remove');
+                showNotification(productName + ' added to comparison', 'success');
+            }
+        });
+    }
+}
+
+// Cart Page Functions
+function initCartPage() {
+    if ($('.cart-item').length > 0) {
+        // Quantity controls
+        $('.quantity-btn').on('click', function() {
+            const $btn = $(this);
+            const $item = $btn.closest('.cart-item');
+            const $quantity = $item.find('.quantity-value');
+            const $price = $item.find('.item-price');
+            const currentQty = parseInt($quantity.text());
+            const basePrice = parseFloat($price.text().replace('$', '').replace(',', ''));
+            
+            if ($btn.text() === '+' && currentQty < 10) {
+                const newQty = currentQty + 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty > 1) {
+                const newQty = currentQty - 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            }
+        });
+        
+        // Remove items
+        $('.remove-btn').on('click', function() {
+            const $item = $(this).closest('.cart-item');
+            const productName = $item.find('.item-title').text();
+            
+            $item.fadeOut(300, function() {
+                $(this).remove();
+                updateCartTotal();
+                showNotification(productName + ' removed from cart', 'info');
+            });
+        });
+        
+        // Promo code
+        $('.promo-btn').on('click', function() {
+            const code = $('.promo-input').val().toUpperCase();
+            const validCodes = ['SAVE10', 'WELCOME20', 'TECH15'];
+            
+            if (validCodes.includes(code)) {
+                showNotification('Promo code applied! 10% discount', 'success');
+                $('.promo-input').val('');
+            } else {
+                showNotification('Invalid promo code', 'error');
+            }
+        });
+    }
+}
+
+function updateCartTotal() {
+    let total = 0;
+    $('.cart-item').each(function() {
+        const price = parseFloat($(this).find('.item-price').text().replace('$', '').replace(',', ''));
+        total += price;
+    });
+    
+    const tax = total * 0.08;
+    const finalTotal = total + tax;
+    
+    $('.summary-row').eq(0).find('.summary-value').text('$' + total.toLocaleString());
+    $('.summary-row').eq(2).find('.summary-value').text('$' + tax.toFixed(2));
+    $('.summary-row.total .summary-value').text('$' + finalTotal.toFixed(2));
+}
+
+function clearCart() {
+    if (confirm('Are you sure you want to clear your cart?')) {
+        $('.cart-item').fadeOut(300, function() {
+            $(this).remove();
+        });
+        showNotification('Cart cleared successfully', 'success');
+        setTimeout(() => {
+            $('.results-count').text('0 products found');
+        }, 300);
+    }
+}
+
+function proceedToCheckout() {
+    showNotification('Redirecting to checkout...', 'info');
+    setTimeout(() => {
+        showNotification('Checkout page would open here', 'success');
+    }, 1000);
+}
+
+// Product Page Functions
+function initProductPage() {
+    if ($('.product-container').length > 0) {
+        // Image thumbnail switching
+        $('.thumbnail').on('click', function() {
+            const newSrc = $(this).attr('src').replace('100x100', '600x400');
+            $('#mainImage').attr('src', newSrc);
+            
+            $('.thumbnail').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        // Specifications toggle
+        $('.specs-toggle').on('click', function() {
+            const $specs = $('#allSpecs');
+            if ($specs.is(':visible')) {
+                $specs.slideUp();
+                $(this).text('View All Specifications');
+            } else {
+                $specs.slideDown();
+                $(this).text('Hide Specifications');
+            }
+        });
+        
+        // Seller buy buttons
+        $('.seller-buy').on('click', function() {
+            const sellerName = $(this).closest('.seller-item').find('.seller-name').text();
+            showNotification('Redirecting to ' + sellerName + '...', 'info');
+        });
+    }
+}
+
+function addToCart() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to cart!', 'success');
+}
+
+function addToCompare() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' added to comparison', 'success');
+}
+
+function saveForLater() {
+    const productName = $('.product-title').text();
+    showNotification(productName + ' saved for later', 'success');
+}
+
+// Initialize page-specific functions
+$(document).ready(function() {
+    // Check which page we're on and initialize appropriate functions
+    if (window.location.pathname.includes('catalog.html')) {
+        initCatalogPage();
+        // Ensure all cards are visible on page load
+        $('.product-card').show();
+        // Update results count on page load
+        const visibleCount = $('.product-card:visible').length;
+        $('.results-count').text(visibleCount + ' products found');
+    } else if (window.location.pathname.includes('cart.html')) {
+        initCartPage();
+    } else if (window.location.pathname.includes('product.html')) {
+        initProductPage();
+    }
+});
+
+// Fix for catalog page - ensure cards are visible
+$(document).ready(function() {
+    if (window.location.pathname.includes('catalog.html')) {
+        console.log('Catalog page detected, initializing...');
+        $('.product-card').show();
+        const visibleCount = $('.product-card:visible').length;
+        $('.results-count').text(visibleCount + ' products found');
+        console.log('Found ' + visibleCount + ' product cards');
+    }
+});
+
+// Fix for cart page - correct quantity and price handling
+$(document).ready(function() {
+    if (window.location.pathname.includes('cart.html')) {
+        // Store base prices for each item
+        const basePrices = {
+            'macbook': 2499,
+            'iphone': 999,
+            'tv': 1299
+        };
+        
+        // Override quantity controls with correct logic
+        $('.quantity-btn').off('click').on('click', function() {
+            const $btn = $(this);
+            const $item = $btn.closest('.cart-item');
+            const $quantity = $item.find('.quantity-value');
+            const $price = $item.find('.item-price');
+            const currentQty = parseInt($quantity.text());
+            const productId = $item.data('product');
+            const basePrice = basePrices[productId];
+            
+            if ($btn.text() === '+' && currentQty < 10) {
+                const newQty = currentQty + 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty > 1) {
+                const newQty = currentQty - 1;
+                $quantity.text(newQty);
+                $price.text('$' + (basePrice * newQty).toLocaleString());
+                updateCartTotal();
+                showNotification('Quantity updated', 'success');
+            } else if ($btn.text() === '-' && currentQty === 1) {
+                // Remove item from cart when quantity is 1 and minus is clicked
+                const productName = $item.find('.item-title').text();
+                $item.fadeOut(300, function() {
+                    $(this).remove();
+                    updateCartTotal();
+                    showNotification(productName + ' removed from cart', 'info');
+                });
+            }
+        });
+        
+        // Update cart total on page load
+        updateCartTotal();
+    }
+});
+
+// Fixed updateCartTotal function
+function updateCartTotal() {
+    let total = 0;
+    let itemCount = 0;
+    
+    $('.cart-item').each(function() {
+        const price = parseFloat($(this).find('.item-price').text().replace('$', '').replace(',', ''));
+        const quantity = parseInt($(this).find('.quantity-value').text());
+        total += price;
+        itemCount += quantity;
+    });
+    
+    const tax = total * 0.08;
+    const finalTotal = total + tax;
+    
+    // Update summary
+    $('.summary-row').eq(0).find('.summary-label').text(`Subtotal (${itemCount} items)`);
+    $('.summary-row').eq(0).find('.summary-value').text('$' + total.toLocaleString());
+    $('.summary-row').eq(2).find('.summary-value').text('$' + tax.toFixed(2));
+    $('.summary-row.total .summary-value').text('$' + finalTotal.toFixed(2));
+}
+
+// Enhanced catalog filtering
+$(document).ready(function() {
+    if (window.location.pathname.includes('catalog.html')) {
+        // Override filter functionality with enhanced logic
+        $('.filter-apply').off('click').on('click', function() {
+            applyFilters();
+            showNotification('Filters applied successfully!', 'success');
+        });
+        
+        $('.filter-clear').off('click').on('click', function() {
+            $('input[type="checkbox"]').prop('checked', false);
+            $('input[type="number"]').val('');
+            $('.product-card').show();
+            updateResultsCount();
+            showNotification('All filters cleared!', 'info');
+        });
+        
+        function applyFilters() {
+            const selectedCategories = $('input[value="laptop"], input[value="smartphone"], input[value="tablet"], input[value="tv"], input[value="headphones"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            const selectedBrands = $('input[value="apple"], input[value="samsung"], input[value="dell"], input[value="hp"], input[value="sony"], input[value="lg"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            const selectedRAM = $('input[value="8"], input[value="16"], input[value="32"]:checked').map(function() {
+                return parseInt($(this).val());
+            }).get();
+            
+            const selectedStorage = $('input[value="256"], input[value="512"], input[value="1024"]:checked').map(function() {
+                return parseInt($(this).val());
+            }).get();
+            
+            const minPrice = parseInt($('#minPrice').val()) || 0;
+            const maxPrice = parseInt($('#maxPrice').val()) || Infinity;
+            
+            $('.product-card').each(function() {
+                const $card = $(this);
+                const category = $card.data('category');
+                const brand = $card.data('brand');
+                const ram = parseInt($card.data('ram'));
+                const storage = parseInt($card.data('storage'));
+                const price = parseInt($card.find('.product-price').text().replace('$', '').replace(',', ''));
+                
+                let show = true;
+                
+                // Category filter
+                if (selectedCategories.length > 0 && !selectedCategories.includes(category)) {
+                    show = false;
+                }
+                
+                // Brand filter
+                if (selectedBrands.length > 0 && !selectedBrands.includes(brand)) {
+                    show = false;
+                }
+                
+                // RAM filter
+                if (selectedRAM.length > 0 && !selectedRAM.includes(ram)) {
+                    show = false;
+                }
+                
+                // Storage filter
+                if (selectedStorage.length > 0 && !selectedStorage.includes(storage)) {
+                    show = false;
+                }
+                
+                // Price filter
+                if (price < minPrice || price > maxPrice) {
+                    show = false;
+                }
+                
+                if (show) {
+                    $card.show();
+                } else {
+                    $card.hide();
+                }
+            });
+            
+            updateResultsCount();
+        }
+        
+        function updateResultsCount() {
+            const visibleCount = $('.product-card:visible').length;
+            $('.results-count').text(visibleCount + ' products found');
+        }
+        
+        // Add to Cart functionality
+        $('.add-to-cart-btn').on('click', function() {
+            const $card = $(this).closest('.product-card');
+            const productName = $card.find('.product-title').text();
+            const productPrice = $card.find('.product-price').text();
+            
+            showNotification(productName + ' added to cart!', 'success');
+            
+            // Add animation effect
+            $(this).html('✓ Added').addClass('btn-success').removeClass('btn-success');
+            setTimeout(() => {
+                $(this).html('Add to Cart').removeClass('btn-success').addClass('btn-success');
+            }, 2000);
+        });
+        
+        // View Details functionality
+        $('.btn-primary').on('click', function() {
+            if ($(this).text() === 'View Details') {
+                const $card = $(this).closest('.product-card');
+                const productName = $card.find('.product-title').text();
+                showNotification('Opening details for ' + productName, 'info');
+            }
+        });
+    }
+});
 
 
 

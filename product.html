@@ -14,7 +14,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <img class="logo-img me-2" src="logo.png" alt="logo" width="32" height="32">
+                <img class="logo-img me-2" src="logo.jpg" alt="logo" width="32" height="32">
                 <span class="logo">TechMarket</span>
             </a>
             
@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link active" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="catalog.html">Catalog</a>
@@ -62,20 +62,20 @@
             <!-- Product Images -->
             <section class="product-images">
                 <div class="main-image">
-                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop&crop=center" alt="MacBook Pro 16" id="mainImage" onerror="this.src='https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=MacBook+Pro+16'">
+                    <img src="card-photo.png" alt="MacBook Pro 16" id="mainImage" >
                 </div>
                 <div class="image-thumbnails">
-                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100&h=100&fit=crop&crop=center" alt="Front view" class="thumbnail active" onerror="this.src='https://via.placeholder.com/100x100/4F46E5/FFFFFF?text=Front'">
-                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center" alt="Side view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/059669/FFFFFF?text=Side'">
-                    <img src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=100&h=100&fit=crop&crop=center" alt="Back view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/DC2626/FFFFFF?text=Back'">
-                    <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=100&h=100&fit=crop&crop=center" alt="Open view" class="thumbnail" onerror="this.src='https://via.placeholder.com/100x100/7C3AED/FFFFFF?text=Open'">
+                    <img src="card-photo.png" alt="Front view" class="thumbnail active" >
+                    <img src="card-photo.png" alt="Side view" class="thumbnail">
+                    <img src="card-photo.png" alt="Back view" class="thumbnail" >
+                    <img src="card-photo.png" alt="Open view" class="thumbnail">
                 </div>
             </section>
 
             <!-- Product Details -->
             <section class="product-details">
                 <div class="product-header">
-                    <h1 class="product-title">MacBook Pro 16" with M3 Pro chip</h1>
+                    <h1 class="product-title">MacBook Pro 16"</h1>
                     <div class="product-rating">
                         <div class="stars">
                             <span class="star">★</span>
@@ -198,9 +198,9 @@
 
                 <!-- Action Buttons -->
                 <div class="product-actions">
-                    <button class="btn-primary btn-large">Add to Cart</button>
-                    <button class="btn-secondary btn-large">Add to Compare</button>
-                    <button class="btn-outline btn-large">Save for Later</button>
+                    <button class="btn-primary btn-large" onclick="addToCart()">Add to Cart</button>
+                    <button class="btn-secondary btn-large" onclick="addToCompare()">Add to Compare</button>
+                    <button class="btn-outline btn-large" onclick="saveForLater()">Save for Later</button>
                 </div>
             </section>
         </div>
@@ -212,35 +212,34 @@
                 <div class="products-grid">
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=300&h=200&fit=crop&crop=center" alt="MacBook Air" onerror="this.src='https://via.placeholder.com/300x200/059669/FFFFFF?text=MacBook+Air'">
+                            <img src="card-photo.png" alt="MacBook Air" >
                         </div>
                         <div class="product-info">
                             <h4 class="product-title">MacBook Air 15"</h4>
                             <p class="product-spec">M2 • 8GB RAM • 256GB SSD</p>
                             <div class="product-price">$1,299</div>
-                            <button class="btn-secondary">Compare</button>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" data-category="laptop" data-brand="apple" data-ram="8" data-storage="512">
                         <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=200&fit=crop&crop=center" alt="Dell XPS 16" onerror="this.src='https://via.placeholder.com/300x200/DC2626/FFFFFF?text=Dell+XPS+16'">
+                            <img src="card-photo.png" alt="MacBook Pro 14" loading="lazy">
                         </div>
                         <div class="product-info">
-                            <h4 class="product-title">Dell XPS 16</h4>
-                            <p class="product-spec">i7 • 16GB RAM • 512GB SSD</p>
-                            <div class="product-price">$1,899</div>
-                            <button class="btn-secondary">Compare</button>
+                            <h4 class="product-title">MacBook Pro 14"</h4>
+                            <p class="product-spec">M3 • 8GB RAM • 512GB SSD</p>
+                            <div class="product-price">$1,999</div>
+                        
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" data-category="tablet" data-brand="apple" data-ram="8" data-storage="256">
                         <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=300&h=200&fit=crop&crop=center" alt="HP EliteBook" onerror="this.src='https://via.placeholder.com/300x200/7C3AED/FFFFFF?text=HP+EliteBook'">
+                            <img src="card-photo.png" alt="iPad Pro" loading="lazy">
                         </div>
                         <div class="product-info">
-                            <h4 class="product-title">HP EliteBook 16"</h4>
-                            <p class="product-spec">i7 • 16GB RAM • 1TB SSD</p>
-                            <div class="product-price">$1,599</div>
-                            <button class="btn-secondary">Compare</button>
+                            <h4 class="product-title">iPad Pro 12.9"</h4>
+                            <p class="product-spec">M2 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,099</div>
+                            
                         </div>
                     </div>
                 </div>
@@ -271,7 +270,11 @@
         </div>
     </footer>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
