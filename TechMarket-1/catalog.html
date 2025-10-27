@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog - TechMarket</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img class="logo-img me-2" src="logo.jpg" alt="logo" width="32" height="32">
+                <span class="logo">TechMarket</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="catalog.html">Catalog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="comparison.html">Compare</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-light me-2" type="button">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                    <button class="btn btn-outline-light" type="button">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main" style="margin-top: 76px;">
+        <div class="catalog-container">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <h3 class="filters-title">Filters</h3>
+                
+                <!-- Price Range -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Price Range</h4>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" placeholder="Min" id="minPrice">
+                        <span class="input-group-text">-</span>
+                        <input type="number" class="form-control" placeholder="Max" id="maxPrice">
+                    </div>
+                </div>
+
+                <!-- RAM Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">RAM</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="8">
+                            <span class="checkmark"></span>
+                            8GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="16">
+                            <span class="checkmark"></span>
+                            16GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="32">
+                            <span class="checkmark"></span>
+                            32GB
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Storage Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Storage</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="256">
+                            <span class="checkmark"></span>
+                            256GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="512">
+                            <span class="checkmark"></span>
+                            512GB
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="1024">
+                            <span class="checkmark"></span>
+                            1TB
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="filter-group">
+                    <h4 class="filter-label">Category</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="laptop">
+                            <span class="checkmark"></span>
+                            Laptop
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="smartphone">
+                            <span class="checkmark"></span>
+                            Smartphone
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="tablet">
+                            <span class="checkmark"></span>
+                            Tablet
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="tv">
+                            <span class="checkmark"></span>
+                            TV
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="headphones">
+                            <span class="checkmark"></span>
+                            Headphones
+                        </label>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-secondary filter-apply">Apply Filters</button>
+                <button class="btn btn-outline-light filter-clear">Clear All</button>
+            </aside>
+
+            <!-- Products Section -->
+            <section class="products-section">
+                <div class="products-header">
+                    <h2 class="products-title">All Products</h2>
+                    <div class="products-controls">
+                        <!-- Search Bar -->
+                        <div class="search-container me-3">
+                            <input type="text" class="form-control" placeholder="Search products..." id="catalogSearch">
+                        </div>
+                        <select class="form-select me-3" style="width: auto;">
+                            <option value="best-match">Best Match</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="newest">Newest</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                        <span class="results-count">20 products found</span>
+                    </div>
+                </div>
+
+                <div class="products-grid">
+                    <!-- Laptops -->
+                    <div class="product-card" data-category="laptop" data-brand="apple" data-ram="16" data-storage="512">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="MacBook Pro 16-inch laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">MacBook Pro 16"</h4>
+                            <p class="product-spec">M3 Pro • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$2,499</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn"><a href="product.html">View Details</a></button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="laptop" data-brand="dell" data-ram="16" data-storage="512">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Dell XPS 15 laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Dell XPS 15</h4>
+                            <p class="product-spec">i7 • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$1,899</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="laptop" data-brand="hp" data-ram="8" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="HP Spectre x360 laptop" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">HP Spectre x360</h4>
+                            <p class="product-spec">i5 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,299</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="laptop" data-brand="apple" data-ram="8" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="MacBook Air" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">MacBook Air 15"</h4>
+                            <p class="product-spec">M2 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,299</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smartphones -->
+                    <div class="product-card" data-category="smartphone" data-brand="apple" data-ram="8" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="iPhone 15 Pro" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">iPhone 15 Pro</h4>
+                            <p class="product-spec">A17 Pro • 8GB RAM • 256GB</p>
+                            <div class="product-price">$999</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="smartphone" data-brand="samsung" data-ram="12" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung Galaxy S24" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung Galaxy S24 Ultra</h4>
+                            <p class="product-spec">Snapdragon 8 Gen 3 • 12GB RAM • 256GB</p>
+                            <div class="product-price">$1,199</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="smartphone" data-brand="apple" data-ram="6" data-storage="128">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="iPhone 15" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">iPhone 15</h4>
+                            <p class="product-spec">A16 Bionic • 6GB RAM • 128GB</p>
+                            <div class="product-price">$799</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tablets -->
+                    <div class="product-card" data-category="tablet" data-brand="apple" data-ram="8" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="iPad Pro" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">iPad Pro 12.9"</h4>
+                            <p class="product-spec">M2 • 8GB RAM • 256GB SSD</p>
+                            <div class="product-price">$1,099</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="tablet" data-brand="samsung" data-ram="8" data-storage="256">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung Galaxy Tab S9" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung Galaxy Tab S9</h4>
+                            <p class="product-spec">Snapdragon 8 Gen 2 • 8GB RAM • 256GB</p>
+                            <div class="product-price">$799</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TVs -->
+                    <div class="product-card" data-category="tv" data-brand="samsung" data-ram="4" data-storage="32">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung QLED 65" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung QLED 65"</h4>
+                            <p class="product-spec">4K • HDR10+ • Smart TV</p>
+                            <div class="product-price">$1,299</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="tv" data-brand="lg" data-ram="3" data-storage="16">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="LG OLED 55" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">LG OLED 55"</h4>
+                            <p class="product-spec">4K OLED • Dolby Vision • Smart TV</p>
+                            <div class="product-price">$1,499</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Headphones -->
+                    <div class="product-card" data-category="headphones" data-brand="sony" data-ram="0" data-storage="0">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Sony WH-1000XM5" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Sony WH-1000XM5</h4>
+                            <p class="product-spec">Noise Cancelling • 30h Battery • Wireless</p>
+                            <div class="product-price">$399</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="headphones" data-brand="apple" data-ram="0" data-storage="0">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="AirPods Pro" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">AirPods Pro 2nd Gen</h4>
+                            <p class="product-spec">Active Noise Cancellation • Spatial Audio</p>
+                            <div class="product-price">$249</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Products -->
+                    <div class="product-card" data-category="laptop" data-brand="dell" data-ram="32" data-storage="1024">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Dell Alienware" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Dell Alienware m16</h4>
+                            <p class="product-spec">i9 • 32GB RAM • 1TB SSD • RTX 4080</p>
+                            <div class="product-price">$2,999</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="laptop" data-brand="hp" data-ram="16" data-storage="512">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="HP Pavilion" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">HP Pavilion 15</h4>
+                            <p class="product-spec">i7 • 16GB RAM • 512GB SSD</p>
+                            <div class="product-price">$899</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="smartphone" data-brand="samsung" data-ram="8" data-storage="128">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung Galaxy A54" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung Galaxy A54</h4>
+                            <p class="product-spec">Exynos 1380 • 8GB RAM • 128GB</p>
+                            <div class="product-price">$449</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="tablet" data-brand="apple" data-ram="4" data-storage="64">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="iPad Air" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">iPad Air 10.9"</h4>
+                            <p class="product-spec">M1 • 4GB RAM • 64GB</p>
+                            <div class="product-price">$599</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="tv" data-brand="sony" data-ram="4" data-storage="32">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Sony Bravia 75" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Sony Bravia 75"</h4>
+                            <p class="product-spec">4K • XR Processor • Smart TV</p>
+                            <div class="product-price">$2,199</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="headphones" data-brand="samsung" data-ram="0" data-storage="0">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung Galaxy Buds" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung Galaxy Buds2 Pro</h4>
+                            <p class="product-spec">Active Noise Cancellation • Hi-Fi Audio</p>
+                            <div class="product-price">$229</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="smartphone" data-brand="apple" data-ram="8" data-storage="512">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="iPhone 15 Pro Max" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">iPhone 15 Pro Max</h4>
+                            <p class="product-spec">A17 Pro • 8GB RAM • 512GB</p>
+                            <div class="product-price">$1,199</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="laptop" data-brand="apple" data-ram="8" data-storage="512">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="MacBook Pro 14" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">MacBook Pro 14"</h4>
+                            <p class="product-spec">M3 • 8GB RAM • 512GB SSD</p>
+                            <div class="product-price">$1,999</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-category="tablet" data-brand="samsung" data-ram="6" data-storage="128">
+                        <div class="product-image">
+                            <img src="card-photo.png" alt="Samsung Galaxy Tab A8" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title">Samsung Galaxy Tab A8</h4>
+                            <p class="product-spec">Unisoc T618 • 6GB RAM • 128GB</p>
+                            <div class="product-price">$299</div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary view-details-btn">View Details</button>
+                                <button class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                <button class="btn btn-secondary compare-btn">Compare</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+            
+            </section>
+        </div>
+        
+        <!-- Floating Compare Button -->
+        <div class="floating-compare">
+            <button class="btn-primary compare-btn">
+                Compare Products (2)
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">TechMarket</h4>
+                    <p class="footer-desc">Your trusted tech marketplace</p>
+                </div>
+                <div class="footer-section">
+                    <h5 class="footer-subtitle">Team Members</h5>
+                    <ul class="footer-list">
+                        <li>Mirzanov Temirlan</li>
+                        <li>Toilybekov Assylkhan</li>
+                        <li>Aitimbet Baknur</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-text">Copyright © 2025 TAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+    
+</body>
+</html>
