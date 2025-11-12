@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initKeyboardShortcuts(); // ESC, arrow nav
     renderProductsIfNeeded('.products-grid'); // optional render if container exists
     initfilterFunctionality(); // optional filter functionality
+    initializeProfileForm(); // profile form enhancements
     // Initialize authentication (header button + modal across pages)
     if (typeof initAuthFeatures === 'function') {
       initAuthFeatures();
@@ -105,12 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = document.getElementById(targetId);
             if (target) { target.style.display = 'block'; target.classList.add('active'); }
           });
-        });
-      }
-      const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-      if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', () => {
-          showNotification('Settings saved', 'success');
         });
       }
     } catch (_) {}
@@ -1235,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           /* Date Time Display Styles */
           .datetime-container {
-              position: absolute;
+              position: fixed;
               top: 90px;
               left: 20px;
               background: rgba(255, 255, 255, 0.1);
@@ -1319,6 +1314,8 @@ document.addEventListener('DOMContentLoaded', () => {
       initNotificationSystem();
       initCopyToClipboard();
       initLazyLoading();
+      initializeProfileForm();
+      initializeOrderActions();
       
       // Initialize catalog page immediately
       if (window.location.pathname.includes('catalog.html')) {
@@ -1467,6 +1464,9 @@ function clearFavorites() {
         showNotification('Favorites cleared!', 'info');
     }
 }
+
+
+
   // Catalog Page Functions
   function initCatalogPage() {
       if ($('#catalogSearch').length > 0) {
@@ -1895,6 +1895,8 @@ function clearFavorites() {
       const productName = $('.product-title').text();
       showNotification(productName + ' saved for later', 'success');
   }
+
+  
   
   // Initialize page-specific functions
   $(document).ready(function() {
@@ -3132,4 +3134,67 @@ function clearFavorites() {
       updateAppUI(); 
   }
   
-  
+function initializeProfileForm() {
+    const saveButton = document.querySelector('.form-actions .btn-primary');
+    
+    const cancelButton = document.querySelector('.form-actions .btn-outline');
+
+    if (saveButton) {
+        saveButton.addEventListener('click', (event) => {
+            
+            event.preventDefault(); 
+            
+            showNotification('Profile changes saved successfully!', 'success');
+            
+        });
+        
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', (event) => {
+            
+            event.preventDefault(); 
+            
+            showNotification('Changes discarded.', 'info');
+            
+        });
+    }
+}
+
+function initializeOrderActions() {
+    document.addEventListener('click', function(event) {
+        const clickedButton = event.target.closest('.order-actions .btn-outline');
+
+        if (clickedButton) {
+            event.preventDefault(); 
+            
+            const actionText = clickedButton.textContent.trim();
+            let message = '';
+            let type = 'info';
+
+            switch (actionText) {
+                case 'Track Package':
+                    message = 'Tracking information is loading...';
+                    type = 'info';
+                    break;
+                case 'Reorder':
+                    message = 'Item re-added to your cart!';
+                    type = 'success';
+                    break;
+                case 'Return':
+                    message = 'Return request initiated.';
+                    type = 'warning';
+                    break;
+                case 'Cancel Order':
+                    message = 'Order has been successfully cancelled.';
+                    type = 'warning';
+                    break;
+                default:
+                    message = `${actionText} action performed.`;
+                    type = 'info';
+            }
+            
+            showNotification(message, type);
+        }
+    });
+}
