@@ -151,16 +151,19 @@ document.addEventListener('DOMContentLoaded', () => {
      FORM VALIDATION
      =========================== */
   function initializeFormValidation() {
-    const form = document.querySelector('form');
-    if (!form) return;
+    // Get all forms except the auth form
+    const forms = document.querySelectorAll('form:not(#authForm)');
+    if (forms.length === 0) return;
   
-    const requiredFields = form.querySelectorAll('[required]');
-    requiredFields.forEach(field => {
-      field.addEventListener('blur', validateField);
-      field.addEventListener('input', clearFieldError);
+    forms.forEach(form => {
+      const requiredFields = form.querySelectorAll('[required]');
+      requiredFields.forEach(field => {
+        field.addEventListener('blur', validateField);
+        field.addEventListener('input', clearFieldError);
+      });
+  
+      form.addEventListener('submit', handleFormSubmission);
     });
-  
-    form.addEventListener('submit', handleFormSubmission);
   }
   
   function validateField(event) {
@@ -2931,208 +2934,446 @@ function clearFavorites() {
   /* ===========================
      AUTHENTICATION (Login/Register/Logout) - Modal-based
      =========================== */
-  
-  // Constants for localStorage keys
-  const USERS_STORAGE_KEY = 'techmarket_users';
-  const CURRENT_USER_KEY = 'techmarket_currentUser';
-  
-  // Function to retrieve all stored users
-  function getAllUsers() {
-      const users = localStorage.getItem(USERS_STORAGE_KEY);
-      return users ? JSON.parse(users) : {};
-  }
-  
-  // Function to save a new user
-  function saveUser(email, password, name) {
-      const users = getAllUsers();
-      users[email] = { email: email, password: password, name: name }; 
-      localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-  }
-  
-  function initAuthFeatures() {
-      // --- 1. CREATE TEST ACCOUNT IF NOT EXISTS ---
-      (function createTestAccount() {
-          const users = getAllUsers();
-          const testEmail = 'test@test.com';
-          if (!users[testEmail]) {
-              users[testEmail] = { 
-                  email: testEmail, 
-                  password: 'test12345',        // Password is 'test'
-                  name: 'test test'       // Name is 'test test'
-              };
-              localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-              console.log("Test user 'test test' created.");
-          }
-      })();
-      // --- END TEST ACCOUNT CREATION ---
-      
-      // DOM Element selections (Global & Modal)
-      const authHeaderButton = document.getElementById('authHeaderButton');
-      const authModal = document.getElementById('authModal');
-      const authForm = document.getElementById('authForm');
-      const profileInfoModal = document.getElementById('profileInfoModal');
-      const profileEmailDisplay = document.getElementById('profileEmailModal');
-      const modalTitleText = document.getElementById('modal-title-text');
-      const nameGroup = document.getElementById('nameGroup');
-      const nameInput = document.getElementById('nameInput');
-      const phoneGroup = document.getElementById('phoneGroup');
-      const phoneInput = document.getElementById('phoneInput');
-      const toggleAuthLink = document.getElementById('toggleAuth');
-      const authButton = document.getElementById('authButton');
-      const logoutButtonModal = document.getElementById('logoutButtonModal');
-      
-      // Exit if necessary elements are missing
-      if (!authHeaderButton) return; 
-      
-      let authMode = 'login'; 
-      let bsAuthModal; // Bootstrap Modal instance
-  
-      // Function to close the modal
-      function closeAuthModal() {
-          if (authModal && window.bootstrap) {
-              if (!bsAuthModal) {
-                  // Initialize Bootstrap Modal instance lazily
-                  bsAuthModal = new bootstrap.Modal(authModal);
-              }
-              bsAuthModal.hide();
-          }
-      }
-      
-      // Function to switch between Login and Register modes
-      function toggleAuthMode() {
-          authMode = (authMode === 'login') ? 'register' : 'login';
-          
-          if (authMode === 'register') {
-              modalTitleText.textContent = 'Create New Account';
-              authButton.textContent = 'Sign Up';
-              toggleAuthLink.textContent = 'Already have an account? Log In.';
-              nameGroup.style.display = 'block';
-              nameInput.setAttribute('required', 'true');
-              if (phoneGroup) phoneGroup.style.display = 'block';
-              if (phoneInput) phoneInput.setAttribute('required', 'true');
-              authForm.classList.remove('was-validated'); 
-          } else {
-              modalTitleText.textContent = 'Log In to Your Account';
-              authButton.textContent = 'Log In';
-              toggleAuthLink.textContent = "Don't have an account? Register here.";
-              nameGroup.style.display = 'none';
-              nameInput.removeAttribute('required');
-              if (phoneGroup) phoneGroup.style.display = 'none';
-              if (phoneInput) phoneInput.removeAttribute('required');
-              authForm.classList.remove('was-validated');
-          }
-      }
-      
-      // Function to update the UI across the whole application
-      function updateAppUI() {
-          const currentUserEmail = localStorage.getItem(CURRENT_USER_KEY);
-          const users = getAllUsers();
-          
-          if (currentUserEmail) {
-              // USER IS LOGGED IN
-              const user = users[currentUserEmail];
-              
-              // Display NAME in the header button
-              authHeaderButton.textContent = user ? user.name || currentUserEmail : currentUserEmail; 
-              
-              authHeaderButton.removeAttribute('data-bs-toggle'); 
-              authHeaderButton.removeAttribute('data-bs-target');
-              authHeaderButton.classList.remove('btn-primary');
-              authHeaderButton.classList.add('btn-success'); 
-              
-              // Modal content when logged in
-              authForm.style.display = 'none';
-              profileInfoModal.style.display = 'block';
-              profileEmailDisplay.textContent = currentUserEmail;
-              logoutButtonModal.style.display = 'block';
-  
-          } else {
-              // USER IS LOGGED OUT
-              authHeaderButton.textContent = 'Sign In / Sign Up';
-              authHeaderButton.setAttribute('data-bs-toggle', 'modal');
-              authHeaderButton.setAttribute('data-bs-target', '#authModal');
-              authHeaderButton.classList.remove('btn-success');
-              authHeaderButton.classList.add('btn-primary'); 
-  
-              // Modal content when logged out
-              authForm.style.display = 'block';
-              profileInfoModal.style.display = 'none';
-              logoutButtonModal.style.display = 'none';
-              
-              // Ensure modal starts in 'login' mode UI
-              authMode = 'register'; 
-              toggleAuthMode(); 
-          }
-      }
-      
-      // --- Event Listeners ---
-      
-      if (toggleAuthLink) {
-          toggleAuthLink.addEventListener('click', function(e) {
-              e.preventDefault();
-              toggleAuthMode();
-          });
-      }
-  
-      // --- Form Submission Handler (Login/Register) ---
-      if (authForm) {
-          authForm.addEventListener('submit', function(event) {
-              event.preventDefault();
-              
-              if (!authForm.checkValidity()) {
-                  authForm.classList.add('was-validated');
-                  return;
-              }
-  
-              const emailInput = document.getElementById('emailInput').value.trim();
-              const passwordInput = document.getElementById('passwordInput').value;
-              const users = getAllUsers();
-              
-              if (authMode === 'login') {
-                  // LOG IN LOGIC
-                  if (users[emailInput] && users[emailInput].password === passwordInput) {
-                      localStorage.setItem(CURRENT_USER_KEY, emailInput);
-                      showNotification('Login successful!', 'success');
-                      updateAppUI();
-                      // Redirect to profile page after successful login
-                      window.location.href = 'profile.html';
-                  } else {
-                      showNotification('Invalid email or password.', 'error');
-                  }
-              } else {
-                  // REGISTER LOGIC
-                  if (users[emailInput]) {
-                      showNotification('This email is already registered. Please log in.', 'error');
-                  } else {
-                      const name = document.getElementById('nameInput').value.trim();
-                      saveUser(emailInput, passwordInput, name);
-                      localStorage.setItem(CURRENT_USER_KEY, emailInput);
-                      showNotification('Registration successful! You are now logged in.', 'success');
-                      updateAppUI();
-                      // Redirect to profile page after successful registration
-                      window.location.href = 'profile.html';
-                  }
-              }
-          });
-      }
-      
-      // --- Log Out Button Handler ---
-      if (logoutButtonModal) {
-          logoutButtonModal.addEventListener('click', function() {
-              localStorage.removeItem(CURRENT_USER_KEY);
-              showNotification('You have been logged out.', 'info');
-              updateAppUI(); 
-              closeAuthModal(); // Закрываем модальное окно
-              
-              // Reset form
-              authForm.reset();
-              authForm.classList.remove('was-validated');
-          });
-      }
-  
-      // Initialize UI state on page load
-      updateAppUI(); 
-  }
+
+// Constants for localStorage keys
+const USERS_STORAGE_KEY = 'techmarket_users';
+const CURRENT_USER_KEY = 'techmarket_currentUser';
+
+// Function to retrieve all stored users
+function getAllUsers() {
+    try {
+        const users = localStorage.getItem(USERS_STORAGE_KEY);
+        return users ? JSON.parse(users) : {};
+    } catch (e) {
+        console.error('Error reading users from localStorage:', e);
+        return {};
+    }
+}
+
+// Function to save a new user
+function saveUser(email, password, name, phone = '') {
+    try {
+        const users = getAllUsers();
+        users[email] = { 
+            email: email, 
+            password: password, 
+            name: name,
+            phone: phone,
+            createdAt: new Date().toISOString()
+        };
+        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+        return true;
+    } catch (e) {
+        console.error('Error saving user to localStorage:', e);
+        return false;
+    }
+}
+
+// Function to get current user
+function getCurrentUser() {
+    const email = localStorage.getItem(CURRENT_USER_KEY);
+    if (!email) return null;
+    const users = getAllUsers();
+    return users[email] || null;
+}
+
+// Global variables for Bootstrap Modal instances
+let bsAuthModal = null;
+let bsRegisterModal = null;
+
+function initAuthFeatures() {
+    // Create test account if not exists
+    (function createTestAccount() {
+        const users = getAllUsers();
+        const testEmail = 'test@test.com';
+        if (!users[testEmail]) {
+            saveUser(testEmail, 'test12345', 'Test User', '+1 555 123 4567');
+            console.log("Test user created: test@test.com / test12345");
+        }
+    })();
+    
+    // DOM Element selections - Login Modal
+    const authHeaderButton = document.getElementById('authHeaderButton');
+    const authModal = document.getElementById('authModal');
+    const authForm = document.getElementById('authForm');
+    const profileInfoModal = document.getElementById('profileInfoModal');
+    const profileEmailDisplay = document.getElementById('profileEmailModal');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const authButton = document.getElementById('authButton');
+    const logoutButtonModal = document.getElementById('logoutButtonModal');
+    const openRegisterModalLink = document.getElementById('openRegisterModal');
+    
+    // DOM Element selections - Register Modal
+    const registerModal = document.getElementById('registerModal');
+    const registerForm = document.getElementById('registerForm');
+    const registerFirstNameInput = document.getElementById('registerFirstNameInput');
+    const registerLastNameInput = document.getElementById('registerLastNameInput');
+    const registerPhoneInput = document.getElementById('registerPhoneInput');
+    const registerEmailInput = document.getElementById('registerEmailInput');
+    const registerPasswordInput = document.getElementById('registerPasswordInput');
+    const registerButton = document.getElementById('registerButton');
+    const openLoginModalLink = document.getElementById('openLoginModal');
+    
+    // Exit if essential elements are not found
+    if (!authHeaderButton || !authModal || !authForm || !authButton || !emailInput || !passwordInput) {
+        console.warn('Login modal elements not found, skipping auth initialization');
+        return;
+    }
+
+    // Initialize Bootstrap Modals
+    if (window.bootstrap) {
+        if (authModal) {
+            bsAuthModal = new bootstrap.Modal(authModal, {
+                backdrop: true,
+                keyboard: true
+            });
+        }
+        if (registerModal) {
+            bsRegisterModal = new bootstrap.Modal(registerModal, {
+                backdrop: true,
+                keyboard: true
+            });
+        }
+    }
+    
+    // Close modal functions
+    function closeAuthModal() {
+        if (bsAuthModal) {
+            bsAuthModal.hide();
+        } else if (authModal && window.bootstrap) {
+            const modal = bootstrap.Modal.getInstance(authModal);
+            if (modal) {
+                modal.hide();
+            }
+        }
+    }
+    
+    function closeRegisterModal() {
+        if (bsRegisterModal) {
+            bsRegisterModal.hide();
+        } else if (registerModal && window.bootstrap) {
+            const modal = bootstrap.Modal.getInstance(registerModal);
+            if (modal) {
+                modal.hide();
+            }
+        }
+    }
+    
+    // Update UI based on authentication state
+    function updateAppUI() {
+        const currentUser = getCurrentUser();
+        
+        if (currentUser) {
+            // User is logged in
+            const displayName = currentUser.name || currentUser.email;
+            authHeaderButton.textContent = displayName;
+            authHeaderButton.removeAttribute('data-bs-toggle');
+            authHeaderButton.removeAttribute('data-bs-target');
+            authHeaderButton.classList.remove('btn-primary');
+            authHeaderButton.classList.add('btn-success');
+            
+            // Update modal content for logged in state
+            if (authForm) {
+                authForm.style.display = 'none';
+            }
+            if (profileInfoModal) {
+                profileInfoModal.style.display = 'block';
+            }
+            if (profileEmailDisplay) {
+                profileEmailDisplay.textContent = currentUser.email;
+            }
+            if (logoutButtonModal) {
+                logoutButtonModal.style.display = 'block';
+            }
+            
+            // Update greeting message if element exists
+            const greetingMessage = document.getElementById('greetingMessage');
+            if (greetingMessage) {
+                greetingMessage.textContent = `Welcome back, ${currentUser.name || 'User'}!`;
+            }
+        } else {
+            // User is not logged in
+            authHeaderButton.textContent = 'Sign In / Sign Up';
+            authHeaderButton.setAttribute('data-bs-toggle', 'modal');
+            authHeaderButton.setAttribute('data-bs-target', '#authModal');
+            authHeaderButton.classList.remove('btn-success');
+            authHeaderButton.classList.add('btn-primary');
+            
+            // Update modal content for logged out state
+            if (authForm) {
+                authForm.style.display = 'block';
+            }
+            if (profileInfoModal) {
+                profileInfoModal.style.display = 'none';
+            }
+            if (logoutButtonModal) {
+                logoutButtonModal.style.display = 'none';
+            }
+            
+            // Update greeting message
+            const greetingMessage = document.getElementById('greetingMessage');
+            if (greetingMessage) {
+                greetingMessage.textContent = 'Welcome to TechMarket';
+            }
+        }
+    }
+    
+    // Event Listeners
+    
+    // Open Register Modal from Login Modal
+    if (openRegisterModalLink) {
+        openRegisterModalLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeAuthModal();
+            // Small delay to ensure login modal is closed before opening register modal
+            setTimeout(() => {
+                if (bsRegisterModal) {
+                    bsRegisterModal.show();
+                } else if (registerModal && window.bootstrap) {
+                    const modal = new bootstrap.Modal(registerModal);
+                    modal.show();
+                }
+            }, 300);
+        });
+    }
+    
+    // Open Login Modal from Register Modal
+    if (openLoginModalLink) {
+        openLoginModalLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeRegisterModal();
+            // Small delay to ensure register modal is closed before opening login modal
+            setTimeout(() => {
+                if (bsAuthModal) {
+                    bsAuthModal.show();
+                } else if (authModal && window.bootstrap) {
+                    const modal = new bootstrap.Modal(authModal);
+                    modal.show();
+                }
+            }, 300);
+        });
+    }
+
+    // Login Form submission handler
+    if (authForm) {
+        authForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            
+            // Validate form
+            if (!authForm.checkValidity()) {
+                authForm.classList.add('was-validated');
+                return false;
+            }
+
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            const users = getAllUsers();
+            
+            // Additional JavaScript validation for login
+            // Validate Email
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email || !emailPattern.test(email)) {
+                emailInput.setCustomValidity('Please enter a valid email address.');
+                emailInput.reportValidity();
+                return false;
+            } else {
+                emailInput.setCustomValidity('');
+            }
+            
+            // Validate Password (at least 8 characters for login)
+            if (!password || password.length < 8) {
+                passwordInput.setCustomValidity('Password must be at least 8 characters.');
+                passwordInput.reportValidity();
+                return false;
+            } else {
+                passwordInput.setCustomValidity('');
+            }
+            
+            // LOGIN LOGIC
+            if (!email || !password) {
+                showNotification('Please enter both email and password.', 'error');
+                return false;
+            }
+            
+            const user = users[email];
+            if (user && user.password === password) {
+                localStorage.setItem(CURRENT_USER_KEY, email);
+                showNotification('Login successful!', 'success');
+                updateAppUI();
+                closeAuthModal();
+                
+                // Reset form
+                authForm.reset();
+                authForm.classList.remove('was-validated');
+            } else {
+                showNotification('Invalid email or password. Please try again.', 'error');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+            
+            return false;
+        }, true);
+    }
+    
+    // Register Form submission handler
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            
+            // Validate form
+            if (!registerForm.checkValidity()) {
+                registerForm.classList.add('was-validated');
+                return false;
+            }
+
+            const email = registerEmailInput ? registerEmailInput.value.trim().toLowerCase() : '';
+            const password = registerPasswordInput ? registerPasswordInput.value : '';
+            const firstName = registerFirstNameInput ? registerFirstNameInput.value.trim() : '';
+            const lastName = registerLastNameInput ? registerLastNameInput.value.trim() : '';
+            const phone = registerPhoneInput ? registerPhoneInput.value.trim() : '';
+            const users = getAllUsers();
+            
+            // Additional JavaScript validation
+            // Validate First Name
+            if (!firstName || !/^[A-Za-z]+$/.test(firstName) || firstName.length < 2 || firstName.length > 50) {
+                if (registerFirstNameInput) {
+                    registerFirstNameInput.setCustomValidity('First name must be 2-50 Latin letters only.');
+                    registerFirstNameInput.reportValidity();
+                }
+                return false;
+            } else if (registerFirstNameInput) {
+                registerFirstNameInput.setCustomValidity('');
+            }
+            
+            // Validate Last Name
+            if (!lastName || !/^[A-Za-z]+$/.test(lastName) || lastName.length < 2 || lastName.length > 50) {
+                if (registerLastNameInput) {
+                    registerLastNameInput.setCustomValidity('Last name must be 2-50 Latin letters only.');
+                    registerLastNameInput.reportValidity();
+                }
+                return false;
+            } else if (registerLastNameInput) {
+                registerLastNameInput.setCustomValidity('');
+            }
+            
+            // Validate Email
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email || !emailPattern.test(email)) {
+                if (registerEmailInput) {
+                    registerEmailInput.setCustomValidity('Please enter a valid email address.');
+                    registerEmailInput.reportValidity();
+                }
+                return false;
+            } else if (registerEmailInput) {
+                registerEmailInput.setCustomValidity('');
+            }
+            
+            // Validate Phone
+            const phonePattern = /^\+?[1-9]\d{1,14}$|^\+?[1-9]\d{0,3}[\s\-]?\d{1,4}[\s\-]?\d{1,4}[\s\-]?\d{1,9}$/;
+            if (!phone || !phonePattern.test(phone)) {
+                if (registerPhoneInput) {
+                    registerPhoneInput.setCustomValidity('Please enter a valid phone number.');
+                    registerPhoneInput.reportValidity();
+                }
+                return false;
+            } else if (registerPhoneInput) {
+                registerPhoneInput.setCustomValidity('');
+            }
+            
+            // Validate Password - at least 8 characters, must contain letters and numbers
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+            if (!password || password.length < 8 || !passwordPattern.test(password)) {
+                if (registerPasswordInput) {
+                    registerPasswordInput.setCustomValidity('Password must be at least 8 characters and contain both letters and numbers.');
+                    registerPasswordInput.reportValidity();
+                }
+                return false;
+            } else if (registerPasswordInput) {
+                registerPasswordInput.setCustomValidity('');
+            }
+            
+            // REGISTER LOGIC
+            if (!email || !password || !firstName || !lastName) {
+                showNotification('Please fill in all required fields.', 'error');
+                return false;
+            }
+            
+            const fullName = `${firstName} ${lastName}`;
+            
+            if (users[email]) {
+                showNotification('This email is already registered. Please log in instead.', 'error');
+                closeRegisterModal();
+                setTimeout(() => {
+                    if (bsAuthModal) {
+                        bsAuthModal.show();
+                    }
+                }, 300);
+            } else {
+                if (saveUser(email, password, fullName, phone)) {
+                    localStorage.setItem(CURRENT_USER_KEY, email);
+                    showNotification('Registration successful! Welcome to TechMarket!', 'success');
+                    updateAppUI();
+                    closeRegisterModal();
+                    
+                    // Reset form
+                    registerForm.reset();
+                    registerForm.classList.remove('was-validated');
+                } else {
+                    showNotification('Registration failed. Please try again.', 'error');
+                }
+            }
+            
+            return false;
+        }, true);
+    }
+    
+    // Logout button handler
+    if (logoutButtonModal) {
+        logoutButtonModal.addEventListener('click', function() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+            showNotification('You have been logged out successfully.', 'info');
+            updateAppUI();
+            closeAuthModal();
+            
+            // Reset forms
+            if (authForm) {
+                authForm.reset();
+                authForm.classList.remove('was-validated');
+            }
+            if (registerForm) {
+                registerForm.reset();
+                registerForm.classList.remove('was-validated');
+            }
+        });
+    }
+    
+    // Reset forms when modals are closed
+    if (authModal) {
+        authModal.addEventListener('hidden.bs.modal', function() {
+            if (authForm) {
+                authForm.reset();
+                authForm.classList.remove('was-validated');
+            }
+        });
+    }
+    
+    if (registerModal) {
+        registerModal.addEventListener('hidden.bs.modal', function() {
+            if (registerForm) {
+                registerForm.reset();
+                registerForm.classList.remove('was-validated');
+            }
+        });
+    }
+
+    // Initial UI update
+    updateAppUI();
+}
   
 function initializeProfileForm() {
     const saveButton = document.querySelector('.form-actions .btn-primary');

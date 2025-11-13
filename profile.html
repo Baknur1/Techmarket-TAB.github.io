@@ -289,41 +289,31 @@ United States
             </div>
         </div>
     </footer>
-    <!-- Auth Modal -->
+    <!-- Login Modal -->
     <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="authModalLabel">
-                        <span id="modal-title-text">Log In / Register</span>
+                        <span id="modal-title-text">Log In</span>
                     </h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="authForm" novalidate>
-                        <div class="mb-3" id="nameGroup" style="display:none;">
-                            <label for="nameInput" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="nameInput" pattern="^[A-Za-z\\s]+$">
-                            <div class="invalid-feedback">Please enter your full name (Latin characters only).</div>
-                        </div>
-                        <div class="mb-3" id="phoneGroup" style="display:none;">
-                            <label for="phoneInput" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="phoneInput" pattern="^\\+?[0-9\\-\\s()]{7,}$">
-                            <div class="invalid-feedback">Enter a valid phone number (e.g. +1 555 123 4567).</div>
+                        <div class="mb-3">
+                            <label for="emailInput" class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="emailInput" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" required>
+                            <div class="invalid-feedback">Please enter a valid email address (e.g. user@example.com).</div>
                         </div>
                         <div class="mb-3">
-                            <label for="emailInput" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="emailInput" required>
-                            <div class="invalid-feedback">Please enter a valid email address.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="passwordInput" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordInput" minlength="4" pattern="^[A-Za-z].{3,}$" required>
-                            <div class="invalid-feedback">Password must be at least 4 characters and contain letters.</div>
+                            <label for="passwordInput" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="passwordInput" minlength="8" required>
+                            <div class="invalid-feedback">Password is required.</div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100" id="authButton">Log In</button>
                         <div class="mt-3 text-center">
-                            <a href="#" id="toggleAuth">Don't have an account? Register here.</a>
+                            <a href="#" id="openRegisterModal" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Register</a>
                         </div>
                     </form>
                     <div id="profileInfoModal" style="display:none;">
@@ -333,6 +323,56 @@ United States
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-danger" id="logoutButtonModal" style="display:none;">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="registerModalLabel">
+                        <span id="register-modal-title-text">Create New Account</span>
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm" novalidate>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="registerFirstNameInput" class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="registerFirstNameInput" pattern="^[A-Za-z]+$" minlength="2" maxlength="50" required>
+                                <div class="invalid-feedback">First name must be 2-50 Latin letters only (no spaces or numbers).</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="registerLastNameInput" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="registerLastNameInput" pattern="^[A-Za-z]+$" minlength="2" maxlength="50" required>
+                                <div class="invalid-feedback">Last name must be 2-50 Latin letters only (no spaces or numbers).</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPhoneInput" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="registerPhoneInput" pattern="^\\+?[1-9]\\d{1,14}$|^\\+?[1-9]\\d{0,3}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,9}$" required>
+                            <div class="invalid-feedback">Enter a valid phone number (e.g. +1234567890, +1 555 123 4567, or 1234567890).</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerEmailInput" class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="registerEmailInput" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" required>
+                            <div class="invalid-feedback">Please enter a valid email address (e.g. user@example.com).</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPasswordInput" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="registerPasswordInput" minlength="8" pattern="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&]{8,}$" required>
+                            <div class="invalid-feedback">Password must be at least 8 characters and contain both letters and numbers.</div>
+                            <small class="form-text text-muted">Password must be at least 8 characters with letters and numbers.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="registerButton">Sign Up</button>
+                        <div class="mt-3 text-center">
+                            <a href="#" id="openLoginModal" data-bs-toggle="modal" data-bs-target="#authModal" data-bs-dismiss="modal">Already have an account? Log In</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
